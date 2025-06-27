@@ -1,0 +1,403 @@
+
+/* Museum Kiosk Interface Styles */
+/* Optimized for 1080p touchscreen displays */
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.kiosk-app {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+}
+
+.kiosk-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.screen-container {
+  width: 100%;
+  max-width: 1000px;
+  height: 100%;
+  max-height: 800px;
+  background: white;
+  border-radius: 24px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  padding: 3rem;
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Header Styles */
+.screen-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.museum-title {
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: #1e3a8a;
+  margin: 0 0 1rem 0;
+  letter-spacing: -0.02em;
+}
+
+.screen-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1e3a8a;
+  margin: 0 0 1rem 0;
+}
+
+.screen-subtitle {
+  font-size: 1.5rem;
+  color: #64748b;
+  margin: 0;
+  font-weight: 400;
+}
+
+/* Success Icon */
+.success-icon {
+  margin-bottom: 1.5rem;
+}
+
+/* Welcome Screen - Ticket Selection */
+.ticket-selection {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  flex: 1;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.ticket-button {
+  background: white;
+  border: 3px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 2.5rem 2rem;
+  min-width: 280px;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.ticket-button:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  border-color: #3b82f6;
+}
+
+.ticket-button.selected {
+  border-color: #fbbf24;
+  background: #fffbeb;
+  box-shadow: 0 20px 25px -5px rgba(251, 191, 36, 0.2);
+}
+
+.ticket-icon {
+  color: #3b82f6;
+}
+
+.ticket-button.selected .ticket-icon {
+  color: #f59e0b;
+}
+
+.ticket-text {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1e3a8a;
+  text-align: center;
+}
+
+.ticket-price {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #059669;
+}
+
+/* Contact Form */
+.contact-form {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  justify-content: center;
+  max-width: 600px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.input-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.input-icon {
+  color: #3b82f6;
+}
+
+.kiosk-input {
+  padding: 1.5rem;
+  font-size: 1.25rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  background: white;
+  transition: all 0.3s ease;
+  min-height: 64px;
+}
+
+.kiosk-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.kiosk-input::placeholder {
+  color: #9ca3af;
+}
+
+/* Footer Buttons */
+.screen-footer {
+  display: flex;
+  justify-content: center;
+  margin-top: 3rem;
+}
+
+.continue-button,
+.submit-button,
+.start-over-button {
+  padding: 1.5rem 4rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-height: 64px;
+  min-width: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.continue-button.active,
+.submit-button.active {
+  background: #3b82f6;
+  color: white;
+  box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.3);
+}
+
+.continue-button.active:hover,
+.submit-button.active:hover {
+  background: #2563eb;
+  transform: translateY(-2px);
+  box-shadow: 0 20px 25px -5px rgba(59, 130, 246, 0.3);
+}
+
+.continue-button.disabled,
+.submit-button.disabled {
+  background: #e5e7eb;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.start-over-button {
+  background: #f3f4f6;
+  color: #374151;
+  border: 2px solid #d1d5db;
+}
+
+.start-over-button:hover {
+  background: #e5e7eb;
+  transform: translateY(-2px);
+}
+
+/* Confirmation Screen */
+.confirmation-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.ticket-preview {
+  background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+  color: white;
+  border-radius: 16px;
+  padding: 2rem;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.ticket-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.ticket-header h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.qr-placeholder {
+  width: 64px;
+  height: 64px;
+  background: white;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.qr-code {
+  width: 48px;
+  height: 48px;
+  background: repeating-linear-gradient(
+    45deg,
+    #1e3a8a,
+    #1e3a8a 2px,
+    transparent 2px,
+    transparent 4px
+  );
+  border-radius: 4px;
+}
+
+.ticket-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.info-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1rem;
+}
+
+.info-label {
+  font-weight: 600;
+  min-width: 120px;
+}
+
+.info-value {
+  font-weight: 400;
+}
+
+.confirmation-message {
+  text-align: center;
+  color: #64748b;
+  font-size: 1.125rem;
+  line-height: 1.6;
+  max-width: 600px;
+}
+
+.confirmation-message p {
+  margin: 0 0 1rem 0;
+}
+
+.confirmation-message p:last-child {
+  margin-bottom: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .kiosk-container {
+    padding: 1rem;
+  }
+  
+  .screen-container {
+    padding: 2rem;
+    border-radius: 16px;
+  }
+  
+  .museum-title {
+    font-size: 2.5rem;
+  }
+  
+  .screen-title {
+    font-size: 2rem;
+  }
+  
+  .ticket-selection {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .ticket-button {
+    min-width: 100%;
+    min-height: 120px;
+    padding: 1.5rem;
+  }
+}
+
+/* High DPI Display Optimizations */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .ticket-button,
+  .kiosk-input,
+  .continue-button,
+  .submit-button,
+  .start-over-button {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* Touch-specific optimizations */
+@media (pointer: coarse) {
+  .ticket-button,
+  .continue-button,
+  .submit-button,
+  .start-over-button {
+    min-height: 72px;
+  }
+  
+  .kiosk-input {
+    min-height: 72px;
+  }
+}
