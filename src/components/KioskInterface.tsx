@@ -1,8 +1,11 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import { User } from '@supabase/supabase-js';
 import WelcomeScreen from './WelcomeScreen';
 import ContactInfoScreen from './ContactInfoScreen';
 import ConfirmationScreen from './ConfirmationScreen';
+import AuthScreen from './AuthScreen';
 
 export type TicketType = 'general' | 'student' | 'senior' | null;
 
@@ -18,10 +21,30 @@ export interface BookingData {
 }
 
 const KioskInterface = () => {
-  const [currentScreen, setCurrentScreen] = useState<'welcome' | 'contact' | 'confirmation'>('welcome');
+  const [currentScreen, setCurrentScreen] = useState<'welcome' | 'auth' | 'contact' | 'confirmation'>('welcome');
   const [selectedTicket, setSelectedTicket] = useState<TicketType>(null);
   const [contactInfo, setContactInfo] = useState<ContactInfo>({ email: '', postalCode: '' });
   const [bookingData, setBookingData] = useState<BookingData | null>(null);
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Get initial session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+      setLoading(false);
+    });
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+      if (session?.user && currentScreen === 'auth') {
+        setCurrentScreen('welcome');
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [currentScreen]);
 
   const handleTicketSelect = (ticketType: TicketType) => {
     setSelectedTicket(ticketType);
@@ -29,7 +52,11 @@ const KioskInterface = () => {
 
   const handleContinueToContact = () => {
     if (selectedTicket) {
-      setCurrentScreen('contact');
+      if (user) {
+        setCurrentScreen('contact');
+      } else {
+        setCurrentScreen('auth');
+      }
     }
   };
 
@@ -51,6 +78,31 @@ const KioskInterface = () => {
     setBookingData(null);
   };
 
+  const handleAuthBack = () => {
+    setCurrentScreen('welcome');
+  };
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    setCurrentScreen('welcome');
+    setSelectedTicket(null);
+    setContactInfo({ email: '', postalCode: '' });
+    setBookingData(null);
+  };
+
+  if (loading) {
+    return (
+      <div className="kiosk-container">
+        <div className="screen-container">
+          <div className="loading-screen">
+            <div className="loading-spinner"></div>
+            <p>Loading...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="kiosk-container">
       {currentScreen === 'welcome' && (
@@ -58,6 +110,14 @@ const KioskInterface = () => {
           selectedTicket={selectedTicket}
           onTicketSelect={handleTicketSelect}
           onContinue={handleContinueToContact}
+          user={user}
+          onSignOut={handleSignOut}
+        />
+      )}
+      
+      {currentScreen === 'auth' && (
+        <AuthScreen 
+          onBack={handleAuthBack}
         />
       )}
       
