@@ -35,7 +35,6 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
     ['z', 'x', 'c', 'v', 'b', 'n', 'm', '←']
   ];
 
-  // Get the appropriate keyboard layout based on active field
   const getCurrentKeyboardLayout = () => {
     return activeField === 'postalCode' ? postalCodeKeyboardLayout : emailKeyboardLayout;
   };
@@ -43,6 +42,7 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
   const handleFieldFocus = (fieldName: string) => {
     setActiveField(fieldName);
     setShowKeyboard(true);
+    setFormatError(false); // Reset any previous errors
   };
 
   const handleKeyPress = (key: string) => {
@@ -99,19 +99,17 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
 
   // Validate if character is allowed at specific position for postal code
   const isValidCharacterAtPosition = (char: string, position: number) => {
-    // Canadian postal code pattern: A1A 1A1
-    const patterns = [
-      /[A-Za-z]/, // Position 0: Letter
-      /\d/,       // Position 1: Number
-      /[A-Za-z]/, // Position 2: Letter
-      /\s/,       // Position 3: Space (auto-added)
-      /\d/,       // Position 4: Number
-      /[A-Za-z]/, // Position 5: Letter
-      /\d/        // Position 6: Number
-    ];
+    // Canadian postal code pattern: A1A 1A1 (positions 0,1,2,4,5,6 - position 3 is space)
+    // Position 0, 2, 5: Letters (A-Z)
+    // Position 1, 4, 6: Numbers (0-9)
     
-    if (position >= patterns.length) return false;
-    return patterns[position].test(char);
+    if (position === 0 || position === 2 || position === 5) {
+      return /[A-Za-z]/.test(char);
+    } else if (position === 1 || position === 4 || position === 6) {
+      return /\d/.test(char);
+    }
+    
+    return false; // Invalid position
   };
 
   // Format Canadian postal code (A1A 1A1) with real-time validation and auto-space
