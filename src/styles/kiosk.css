@@ -28,8 +28,8 @@
 /* Language Selector */
 .language-selector-wrapper {
   position: fixed;
-  top: 20px;
-  right: 20px;
+  top: 30px;
+  right: 30px;
   z-index: 1001;
 }
 
@@ -329,11 +329,13 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px 30px;
+  padding: 20px 30px 20px 30px;
   background: linear-gradient(135deg, #E53E3E, #C53030);
   color: white;
   position: relative;
   min-height: 80px;
+  /* Ensure header doesn't overlap with language selector */
+  padding-right: 180px;
 }
 
 .museum-logo {
@@ -366,6 +368,9 @@
   font-size: 16px;
   opacity: 0.9;
   font-weight: 500;
+  /* Position time cleanly to avoid language selector overlap */
+  margin-right: 20px;
+  white-space: nowrap;
 }
 
 .language-selector {
@@ -1134,7 +1139,8 @@
   }
   
   .museum-header {
-    padding: 15px 20px;
+    padding: 15px 20px 15px 20px;
+    padding-right: 160px; /* Adjust for mobile */
   }
   
   .buy-tickets-button {
