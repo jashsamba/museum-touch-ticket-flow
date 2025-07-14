@@ -19,18 +19,17 @@ const CompletionScreen: React.FC<CompletionScreenProps> = ({ onStartOver }) => {
         <div className="museum-text">MUSEUM</div>
       </div>
       
-      <div className="completion-content fade-up">
-        <div className="completion-message">
-          <p>{t('completionMessage')}</p>
+      <div className="completion-content">
+        <div className="completion-center-container">
+          <div className="completion-message">
+            <p>{t('completionMessage')}</p>
+            
+            <p className="email-backup">{t('emailBackup')}</p>
+          </div>
           
-          <p className="email-backup">{t('emailBackup')}</p>
-        </div>
-        
-        <div className="completion-button-container">
           <button 
-            className="start-over-button fade-up"
+            className="start-over-button"
             onClick={onStartOver}
-            style={{ animationDelay: '0.5s' }}
           >
             {t('startNewPurchase')}
           </button>
