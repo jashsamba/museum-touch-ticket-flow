@@ -281,7 +281,7 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
                   </button>
                 </div>
                 
-                <div className="typing-display">
+                <div className={`typing-display ${formatError ? 'typing-error' : ''}`}>
                   <div className="typing-label">
                     {activeField === 'email' ? 'Email address:' : 'Postal code (A1A 1A1):'}
                   </div>

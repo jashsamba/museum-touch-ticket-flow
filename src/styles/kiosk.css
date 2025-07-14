@@ -1106,6 +1106,15 @@
   background-color: #ffe6e6 !important;
 }
 
+.typing-error {
+  animation: typing-error-shake 0.3s ease-in-out;
+}
+
+.typing-error .typing-input {
+  animation: text-shake 0.3s ease-in-out;
+  color: #dc3545;
+}
+
 @keyframes format-error-flicker {
   0%, 100% {
     background-color: #fff;
@@ -1114,6 +1123,39 @@
   50% {
     background-color: #ffe6e6;
     border-color: #dc3545;
+  }
+}
+
+@keyframes typing-error-shake {
+  0%, 100% {
+    transform: translateX(0);
+    background-color: #f8f9fa;
+  }
+  25% {
+    transform: translateX(-5px);
+    background-color: #ffe6e6;
+  }
+  75% {
+    transform: translateX(5px);
+    background-color: #ffe6e6;
+  }
+}
+
+@keyframes text-shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-3px);
+  }
+  40% {
+    transform: translateX(3px);
+  }
+  60% {
+    transform: translateX(-2px);
+  }
+  80% {
+    transform: translateX(2px);
   }
 }
 
