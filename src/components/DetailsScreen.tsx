@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface DetailsScreenProps {
   onContinue: (details: any) => void;
   onBack: () => void;
   totals: any;
+  quantities: {[key: string]: number};
+  addOns: {[key: string]: number};
 }
 
-const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, totals }) => {
+const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, totals, quantities, addOns }) => {
+  const { t } = useLanguage();
   const [details, setDetails] = useState({
     firstName: '',
     lastName: '',
@@ -67,6 +71,59 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
   };
 
   const isValid = details.firstName && details.lastName && details.email && details.contactNumber && details.postalCode && details.acceptTerms;
+
+  // Define ticket and add-on items (same as TicketSelectionScreen)
+  const tickets = [
+    { id: 'adult-general', name: t('adultGeneral'), price: 19.99 },
+    { id: 'child-general', name: t('childGeneral'), price: 14.99 },
+    { id: 'senior-general', name: t('seniorGeneral'), price: 16.99 },
+    { id: 'student-general', name: t('studentGeneral'), price: 16.99 }
+  ];
+
+  const addOnItems = [
+    { id: 'field-trip', name: t('fieldTrip'), price: 17.00 },
+    { id: 'bus-subsidy', name: t('busSubsidy'), price: 15.00 }
+  ];
+
+  // Generate dynamic cart items based on current selections
+  const generateCartItems = () => {
+    const cartItems = [];
+    
+    // Add selected tickets
+    tickets.forEach(ticket => {
+      const quantity = quantities[ticket.id] || 0;
+      if (quantity > 0) {
+        cartItems.push({
+          id: ticket.id,
+          icon: '🎫',
+          name: ticket.name,
+          description: `${ticket.name} (${quantity})`,
+          price: (quantity * ticket.price).toFixed(2),
+          quantity
+        });
+      }
+    });
+    
+    // Add selected add-ons
+    addOnItems.forEach(addOn => {
+      const quantity = addOns[addOn.id] || 0;
+      if (quantity > 0) {
+        cartItems.push({
+          id: addOn.id,
+          icon: '🎁',
+          name: addOn.name,
+          description: `${addOn.name} (${quantity})`,
+          price: (quantity * addOn.price).toFixed(2),
+          quantity
+        });
+      }
+    });
+    
+    return cartItems;
+  };
+
+  const cartItems = generateCartItems();
+  const totalItemCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
     <div className="screen-container">
@@ -204,48 +261,48 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
 
         <div className="cart-sidebar">
           <div className="cart-header">
-            <span className="cart-label">Your Cart</span>
-            <span className="item-count">1 ITEM</span>
+            <span className="cart-label">{t('yourCart')}</span>
+            <span className="item-count">
+              {totalItemCount === 0 ? t('noItems') : 
+               totalItemCount === 1 ? `1 ${t('item')}` : 
+               `${totalItemCount} ${t('items')}`}
+            </span>
           </div>
           
           <div className="cart-items">
-            <div className="cart-item">
-              <span className="item-icon">🎫</span>
-              <div className="item-details">
-                <div>THEMUSEUM General</div>
-                <div>Adult General Admission (1...)</div>
-                <button className="edit-button">Edit</button>
+            {cartItems.length === 0 ? (
+              <div className="empty-cart">
+                <span className="empty-cart-icon">🛒</span>
+                <div className="empty-cart-text">{t('cartEmpty')}</div>
+                <div className="empty-cart-subtext">{t('selectTicketsToStart')}</div>
               </div>
-              <div className="item-price">${totals.subtotal}</div>
-            </div>
-            
-            <div className="cart-item">
-              <span className="item-icon">🎁</span>
-              <div className="item-details">
-                <div>Donation Add-On</div>
-                <div>$5.00 Donation "Recommend...</div>
-                <button className="edit-button">Edit</button>
-              </div>
-              <div className="item-price">$5.00</div>
-            </div>
+            ) : (
+              cartItems.map(item => (
+                <div key={item.id} className="cart-item">
+                  <span className="item-icon">{item.icon}</span>
+                  <div className="item-details">
+                    <div>{item.name}</div>
+                    <div>{item.description}</div>
+                    <button className="edit-button">{t('edit')}</button>
+                  </div>
+                  <div className="item-price">${item.price}</div>
+                </div>
+              ))
+            )}
           </div>
 
           <div className="cart-summary">
             <div className="summary-line">
-              <span>Subtotal</span>
-              <span>${totals.subtotal}</span>
+              <span>{t('subtotal')}</span>
+              <span>${totals?.subtotal || '0.00'}</span>
             </div>
             <div className="summary-line">
-              <span>Selected tax</span>
-              <span>${totals.tax}</span>
-            </div>
-            <div className="summary-line">
-              <span>Service fee</span>
-              <span>${totals.serviceFee}</span>
+              <span>{t('selectedTax')}</span>
+              <span>${totals?.tax || '0.00'}</span>
             </div>
             <div className="summary-line total">
-              <span>Total (inc. tax)</span>
-              <span>${totals.total}</span>
+              <span>{t('totalIncTax')}</span>
+              <span>${totals?.total || '0.00'}</span>
             </div>
           </div>
         </div>

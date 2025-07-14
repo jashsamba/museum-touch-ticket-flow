@@ -167,6 +167,8 @@ const KioskInterface = () => {
             onContinue={handleDetailsSubmit}
             onBack={handleBackToTickets}
             totals={flowData.selections?.totals}
+            quantities={cartQuantities}
+            addOns={cartAddOns}
           />
         )}
         
@@ -175,6 +177,8 @@ const KioskInterface = () => {
             onComplete={handlePaymentComplete}
             onBack={handleBackToDetails}
             totals={flowData.selections?.totals}
+            quantities={cartQuantities}
+            addOns={cartAddOns}
           />
         )}
         
