@@ -20,7 +20,7 @@ const CompletionScreen: React.FC<CompletionScreenProps> = ({ onStartOver, orderD
   const { t } = useLanguage();
   const [webhookUrl, setWebhookUrl] = useState(getN8nWebhookUrl());
   const [showWebhookConfig, setShowWebhookConfig] = useState(false);
-  const [countdown, setCountdown] = useState(5);
+  const [countdown, setCountdown] = useState(10);
   const [isAutoReturning, setIsAutoReturning] = useState(true);
 
   // Send order data to n8n webhook
