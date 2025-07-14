@@ -13,9 +13,9 @@ const LandingScreen: React.FC<LandingScreenProps> = ({ onStartFlow }) => {
         </div>
       </div>
       
-      <div className="landing-content">
+      <div className="landing-content fade-up">
         <button 
-          className="buy-tickets-button"
+          className="buy-tickets-button button-pulse"
           onClick={onStartFlow}
         >
           BUY TICKETS

@@ -7,6 +7,7 @@ import TicketSelectionScreen from './TicketSelectionScreen';
 import DetailsScreen from './DetailsScreen';
 import CheckoutScreen from './CheckoutScreen';
 import CompletionScreen from './CompletionScreen';
+import ProgressIndicator from './ProgressIndicator';
 
 export interface FlowData {
   selections?: any;
@@ -19,6 +20,19 @@ const KioskInterface = () => {
   const [flowData, setFlowData] = useState<FlowData>({});
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isNavigatingBack, setIsNavigatingBack] = useState(false);
+
+  const steps = ['Select Tickets', 'Your Details', 'Payment', 'Complete'];
+  const getStepNumber = () => {
+    switch (currentScreen) {
+      case 'landing': return 0;
+      case 'tickets': return 1;
+      case 'details': return 2;
+      case 'checkout': return 3;
+      case 'completion': return 4;
+      default: return 0;
+    }
+  };
 
   useEffect(() => {
     // Get initial session
@@ -40,15 +54,27 @@ const KioskInterface = () => {
   };
 
   const handleBackToLanding = () => {
-    setCurrentScreen('landing');
+    setIsNavigatingBack(true);
+    setTimeout(() => {
+      setCurrentScreen('landing');
+      setIsNavigatingBack(false);
+    }, 50);
   };
 
   const handleBackToTickets = () => {
-    setCurrentScreen('tickets');
+    setIsNavigatingBack(true);
+    setTimeout(() => {
+      setCurrentScreen('tickets');
+      setIsNavigatingBack(false);
+    }, 50);
   };
 
   const handleBackToDetails = () => {
-    setCurrentScreen('details');
+    setIsNavigatingBack(true);
+    setTimeout(() => {
+      setCurrentScreen('details');
+      setIsNavigatingBack(false);
+    }, 50);
   };
 
   const handleTicketSelections = (selections: any) => {
@@ -85,36 +111,46 @@ const KioskInterface = () => {
 
   return (
     <div className="kiosk-container">
-      {currentScreen === 'landing' && (
-        <LandingScreen onStartFlow={handleStartFlow} />
-      )}
-      
-      {currentScreen === 'tickets' && (
-        <TicketSelectionScreen 
-          onContinue={handleTicketSelections}
-          onBack={handleBackToLanding}
+      {currentScreen !== 'landing' && currentScreen !== 'completion' && (
+        <ProgressIndicator 
+          currentStep={getStepNumber()}
+          totalSteps={4}
+          steps={steps}
         />
       )}
       
-      {currentScreen === 'details' && (
-        <DetailsScreen 
-          onContinue={handleDetailsSubmit}
-          onBack={handleBackToTickets}
-          totals={flowData.selections?.totals}
-        />
-      )}
-      
-      {currentScreen === 'checkout' && (
-        <CheckoutScreen 
-          onComplete={handlePaymentComplete}
-          onBack={handleBackToDetails}
-          totals={flowData.selections?.totals}
-        />
-      )}
-      
-      {currentScreen === 'completion' && (
-        <CompletionScreen onStartOver={handleStartOver} />
-      )}
+      <div className={`screen-transition ${isNavigatingBack ? 'screen-enter-back' : 'screen-enter'}`}>
+        {currentScreen === 'landing' && (
+          <LandingScreen onStartFlow={handleStartFlow} />
+        )}
+        
+        {currentScreen === 'tickets' && (
+          <TicketSelectionScreen 
+            onContinue={handleTicketSelections}
+            onBack={handleBackToLanding}
+          />
+        )}
+        
+        {currentScreen === 'details' && (
+          <DetailsScreen 
+            onContinue={handleDetailsSubmit}
+            onBack={handleBackToTickets}
+            totals={flowData.selections?.totals}
+          />
+        )}
+        
+        {currentScreen === 'checkout' && (
+          <CheckoutScreen 
+            onComplete={handlePaymentComplete}
+            onBack={handleBackToDetails}
+            totals={flowData.selections?.totals}
+          />
+        )}
+        
+        {currentScreen === 'completion' && (
+          <CompletionScreen onStartOver={handleStartOver} />
+        )}
+      </div>
     </div>
   );
 };

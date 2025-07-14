@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import EnhancedQuantityControl from './EnhancedQuantityControl';
 
 interface TicketItem {
   id: string;
@@ -114,11 +115,11 @@ const TicketSelectionScreen: React.FC<TicketSelectionScreenProps> = ({ onContinu
                   <div className="ticket-price">${ticket.price}</div>
                   <div className="ticket-actions">{ticket.details}</div>
                 </div>
-                <div className="quantity-controls">
-                  <button onClick={() => updateQuantity(ticket.id, -1)}>−</button>
-                  <span className="quantity">{quantities[ticket.id] || 0}</span>
-                  <button onClick={() => updateQuantity(ticket.id, 1)}>+</button>
-                </div>
+                <EnhancedQuantityControl
+                  quantity={quantities[ticket.id] || 0}
+                  onUpdate={(change) => updateQuantity(ticket.id, change)}
+                  className="ticket-quantity"
+                />
               </div>
             ))}
           </div>
@@ -138,11 +139,11 @@ const TicketSelectionScreen: React.FC<TicketSelectionScreenProps> = ({ onContinu
                   <div className="addon-name">{addOn.name}</div>
                   <div className="addon-price">${addOn.price.toFixed(2)}</div>
                 </div>
-                <div className="quantity-controls">
-                  <button onClick={() => updateQuantity(addOn.id, -1, true)}>−</button>
-                  <span className="quantity">{addOns[addOn.id] || 0}</span>
-                  <button onClick={() => updateQuantity(addOn.id, 1, true)}>+</button>
-                </div>
+                <EnhancedQuantityControl
+                  quantity={addOns[addOn.id] || 0}
+                  onUpdate={(change) => updateQuantity(addOn.id, change, true)}
+                  className="addon-quantity"
+                />
               </div>
             ))}
           </div>
@@ -152,7 +153,7 @@ const TicketSelectionScreen: React.FC<TicketSelectionScreenProps> = ({ onContinu
             <div className="action-buttons">
               <button className="continue-shopping">Continue Shopping</button>
               <button 
-                className="checkout-button" 
+                className={`checkout-button ${hasSelections ? 'button-pulse' : ''}`}
                 disabled={!hasSelections}
                 onClick={handleContinue}
               >
@@ -210,7 +211,7 @@ const TicketSelectionScreen: React.FC<TicketSelectionScreenProps> = ({ onContinu
           </div>
 
           <button 
-            className="checkout-button-sidebar"
+            className={`checkout-button-sidebar ${hasSelections ? 'button-pulse' : ''}`}
             disabled={!hasSelections}
             onClick={handleContinue}
           >
