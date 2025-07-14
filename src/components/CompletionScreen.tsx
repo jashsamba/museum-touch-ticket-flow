@@ -20,6 +20,8 @@ const CompletionScreen: React.FC<CompletionScreenProps> = ({ onStartOver, orderD
   const { t } = useLanguage();
   const [webhookUrl, setWebhookUrl] = useState(getN8nWebhookUrl());
   const [showWebhookConfig, setShowWebhookConfig] = useState(false);
+  const [countdown, setCountdown] = useState(5);
+  const [isAutoReturning, setIsAutoReturning] = useState(true);
 
   // Send order data to n8n webhook
   const sendToN8n = async (webhookUrl: string) => {
@@ -62,9 +64,27 @@ const CompletionScreen: React.FC<CompletionScreenProps> = ({ onStartOver, orderD
     }
   }, [orderDetails]);
 
+  // Auto-return countdown effect
+  useEffect(() => {
+    if (!isAutoReturning) return;
+
+    const timer = setInterval(() => {
+      setCountdown((prev) => {
+        if (prev <= 1) {
+          onStartOver();
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [isAutoReturning, onStartOver]);
+
   const handleWebhookSave = () => {
     localStorage.setItem('n8n-webhook-url', webhookUrl);
     setShowWebhookConfig(false);
+    setIsAutoReturning(false); // Pause auto-return when configuring
     if (orderDetails) {
       sendToN8n(webhookUrl);
     }
@@ -74,6 +94,11 @@ const CompletionScreen: React.FC<CompletionScreenProps> = ({ onStartOver, orderD
     if (webhookUrl && orderDetails) {
       sendToN8n(webhookUrl);
     }
+  };
+
+  const handleReturnNow = () => {
+    setIsAutoReturning(false);
+    onStartOver();
   };
 
   return (
@@ -93,17 +118,28 @@ const CompletionScreen: React.FC<CompletionScreenProps> = ({ onStartOver, orderD
             <p className="email-backup">{t('emailBackup')}</p>
           </div>
           
+          {isAutoReturning && (
+            <div className="auto-return-notice">
+              <p className="countdown-text">
+                {t('autoReturn').replace('{seconds}', countdown.toString())}
+              </p>
+            </div>
+          )}
+          
           <button 
             className="start-over-button"
-            onClick={onStartOver}
+            onClick={handleReturnNow}
           >
-            {t('startNewPurchase')}
+            {isAutoReturning ? t('returnNow') : t('startNewPurchase')}
           </button>
           
           <div className="webhook-controls">
             <button 
               className="webhook-config-button"
-              onClick={() => setShowWebhookConfig(!showWebhookConfig)}
+              onClick={() => {
+                setShowWebhookConfig(!showWebhookConfig);
+                if (!showWebhookConfig) setIsAutoReturning(false); // Pause auto-return when opening config
+              }}
             >
               ⚙️ Configure n8n Webhook
             </button>

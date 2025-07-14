@@ -13,6 +13,7 @@ interface CheckoutScreenProps {
 const CheckoutScreen: React.FC<CheckoutScreenProps> = ({ onComplete, onBack, totals, quantities, addOns, userEmail }) => {
   const { t } = useLanguage();
   const [processing, setProcessing] = useState(false);
+  const [paymentSuccessful, setPaymentSuccessful] = useState(false);
   const [emailSent, setEmailSent] = useState(false);
   const [emailSending, setEmailSending] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -125,6 +126,12 @@ const CheckoutScreen: React.FC<CheckoutScreenProps> = ({ onComplete, onBack, tot
       
       setEmailSent(true);
       console.log('Receipt email sent to:', userEmail);
+      
+      // After sending receipt, complete the order
+      setTimeout(() => {
+        onComplete();
+      }, 1000);
+      
     } catch (error) {
       console.error('Failed to send receipt email:', error);
     } finally {
@@ -136,19 +143,26 @@ const CheckoutScreen: React.FC<CheckoutScreenProps> = ({ onComplete, onBack, tot
     // Simulate payment processing after 3 seconds
     const timer = setTimeout(() => {
       setProcessing(true);
-      // After another 3 seconds, complete the payment
+      // After another 3 seconds, show payment successful
       setTimeout(() => {
-        onComplete();
+        setProcessing(false);
+        setPaymentSuccessful(true);
       }, 3000);
     }, 3000);
 
     return () => clearTimeout(timer);
-  }, [onComplete]);
+  }, []);
 
   return (
     <div className="screen-container">
       <div className="museum-header">
-        <button className="back-button" onClick={onBack}>{t('backToDetails')}</button>
+        <button 
+          className="back-button" 
+          onClick={onBack}
+          disabled={processing || paymentSuccessful}
+        >
+          {t('backToDetails')}
+        </button>
         <div className="date-time">{formatDateTime(currentTime)}</div>
       </div>
 
@@ -185,13 +199,13 @@ const CheckoutScreen: React.FC<CheckoutScreenProps> = ({ onComplete, onBack, tot
             </div>
 
             <div className="payment-instructions">
-              {processing ? (
-                <div className="processing-message">
-                  <div className="spinner"></div>
-                  <p>{t('processingPayment')}</p>
+              {paymentSuccessful ? (
+                <div className="payment-success-message">
+                  <div className="success-checkmark">✓</div>
+                  <p>{t('paymentSuccessful')}</p>
                   {userEmail && (
                     <button 
-                      className={`send-receipt-button ${emailSent ? 'sent' : ''} ${emailSending ? 'sending' : ''}`}
+                      className={`send-receipt-button ${emailSent ? 'sent' : ''} ${emailSending ? 'sending' : ''} enabled`}
                       onClick={handleSendReceipt}
                       disabled={emailSent || emailSending}
                     >
@@ -208,13 +222,23 @@ const CheckoutScreen: React.FC<CheckoutScreenProps> = ({ onComplete, onBack, tot
                     </button>
                   )}
                 </div>
+              ) : processing ? (
+                <div className="processing-message">
+                  <div className="spinner"></div>
+                  <p>{t('processingPayment')}</p>
+                </div>
               ) : (
                 <p>{t('pinPadInstructions')}</p>
               )}
             </div>
           </div>
 
-          <button className="start-over-button">{t('startOver')}</button>
+        <button 
+          className="start-over-button" 
+          disabled={processing || paymentSuccessful}
+        >
+          {t('startOver')}
+        </button>
         </div>
 
         <div className="cart-sidebar">

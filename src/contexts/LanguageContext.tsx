@@ -102,10 +102,16 @@ const translations = {
     enterPostalCode: 'Enter your postal code (A1A1A1 format)',
     startTyping: 'Start typing...',
     
+    // Payment Success
+    paymentSuccessful: 'Payment Successful',
+    paymentComplete: 'Payment Complete',
+    
     // Completion Screen
     completionMessage: 'Please take the receipt to\nGuest Services and enjoy\nyour visit to THEMUSEUM.',
     emailBackup: 'A backup receipt has been\nsent to your email.',
     startNewPurchase: 'Start New Purchase',
+    autoReturn: 'Returning to main page in {seconds}...',
+    returnNow: 'Return Now',
     
     // Language
     language: 'Language',
@@ -195,10 +201,16 @@ const translations = {
     enterPostalCode: 'Entrez votre code postal (format A1A1A1)',
     startTyping: 'Commencez à taper...',
     
+    // Payment Success
+    paymentSuccessful: 'Paiement Réussi',
+    paymentComplete: 'Paiement Terminé',
+    
     // Completion Screen
     completionMessage: 'Veuillez apporter le reçu au\nService à la clientèle et profitez\nde votre visite au THEMUSEUM.',
     emailBackup: 'Un reçu de sauvegarde a été\nenvoyé à votre courriel.',
     startNewPurchase: 'Nouvel Achat',
+    autoReturn: 'Retour à la page principale dans {seconds}...',
+    returnNow: 'Retourner Maintenant',
     
     // Language
     language: 'Langue',

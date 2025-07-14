@@ -1263,6 +1263,74 @@
   gap: 20px;
 }
 
+.payment-success-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  color: #4CAF50;
+}
+
+.payment-success-message .success-checkmark {
+  font-size: 60px;
+  color: #4CAF50;
+  animation: scale-in 0.5s ease-out;
+}
+
+.payment-success-message p {
+  font-size: 24px;
+  font-weight: bold;
+  color: #4CAF50;
+}
+
+.send-receipt-button {
+  background: #f5f5f5;
+  color: #999;
+  border: 2px solid #ddd;
+  padding: 15px 30px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: not-allowed;
+  transition: all 0.3s ease;
+}
+
+.send-receipt-button.enabled {
+  background: linear-gradient(45deg, #4CAF50, #66BB6A);
+  color: white;
+  border-color: #4CAF50;
+  cursor: pointer;
+  animation: fade-in 0.5s ease-out;
+}
+
+.send-receipt-button.enabled:hover {
+  background: linear-gradient(45deg, #45a049, #5cb85c);
+  transform: translateY(-2px);
+}
+
+.send-receipt-button.sent {
+  background: #4CAF50;
+  color: white;
+  border-color: #4CAF50;
+}
+
+.send-receipt-button.sending {
+  background: #ffa726;
+  color: white;
+  border-color: #ff9800;
+}
+
+.mini-spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top: 2px solid white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-right: 8px;
+}
+
 .spinner {
   width: 40px;
   height: 40px;
@@ -1334,6 +1402,23 @@
   color: #999 !important;
 }
 
+.auto-return-notice {
+  background: rgba(255, 255, 255, 0.15);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  padding: 20px;
+  margin: 20px 0;
+  backdrop-filter: blur(10px);
+}
+
+.countdown-text {
+  font-size: 18px;
+  color: #fbbf24;
+  font-weight: 600;
+  margin: 0;
+  animation: pulse 2s ease-in-out infinite;
+}
+
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -1351,6 +1436,37 @@
   }
   50% {
     transform: scale(1.05);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes scale-in {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
