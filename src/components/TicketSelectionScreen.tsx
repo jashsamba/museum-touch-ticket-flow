@@ -34,6 +34,9 @@ const TicketSelectionScreen: React.FC<TicketSelectionScreenProps> = ({ onContinu
   ];
 
   const addOnItems: AddOnItem[] = [
+    { id: 'donation-5', name: t('donation5'), price: 5.00 },
+    { id: 'donation-10', name: t('donation10'), price: 10.00 },
+    { id: 'donation-25', name: t('donation25'), price: 25.00 },
     { id: 'field-trip', name: t('fieldTrip'), price: 17.00 },
     { id: 'bus-subsidy', name: t('busSubsidy'), price: 15.00 }
   ];
