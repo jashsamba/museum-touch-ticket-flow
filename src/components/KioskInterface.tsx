@@ -39,6 +39,18 @@ const KioskInterface = () => {
     setCurrentScreen('tickets');
   };
 
+  const handleBackToLanding = () => {
+    setCurrentScreen('landing');
+  };
+
+  const handleBackToTickets = () => {
+    setCurrentScreen('tickets');
+  };
+
+  const handleBackToDetails = () => {
+    setCurrentScreen('details');
+  };
+
   const handleTicketSelections = (selections: any) => {
     setFlowData(prev => ({ ...prev, selections }));
     setCurrentScreen('details');
@@ -78,12 +90,16 @@ const KioskInterface = () => {
       )}
       
       {currentScreen === 'tickets' && (
-        <TicketSelectionScreen onContinue={handleTicketSelections} />
+        <TicketSelectionScreen 
+          onContinue={handleTicketSelections}
+          onBack={handleBackToLanding}
+        />
       )}
       
       {currentScreen === 'details' && (
         <DetailsScreen 
           onContinue={handleDetailsSubmit}
+          onBack={handleBackToTickets}
           totals={flowData.selections?.totals}
         />
       )}
@@ -91,6 +107,7 @@ const KioskInterface = () => {
       {currentScreen === 'checkout' && (
         <CheckoutScreen 
           onComplete={handlePaymentComplete}
+          onBack={handleBackToDetails}
           totals={flowData.selections?.totals}
         />
       )}
