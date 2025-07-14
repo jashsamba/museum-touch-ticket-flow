@@ -12,7 +12,8 @@ interface DetailsScreenProps {
 const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, totals, quantities, addOns }) => {
   const { t } = useLanguage();
   const [details, setDetails] = useState({
-    email: ''
+    email: '',
+    postalCode: ''
   });
 
   const [showKeyboard, setShowKeyboard] = useState(false);
@@ -23,7 +24,7 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
     ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
     ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
     ['⇧', 'z', 'x', 'c', 'v', 'b', 'n', 'm', '-', '⇧'],
-    ['@gmail.com', '@outlook.com', '@yahoo.com', '@hotmail.com', '.', '←']
+    ['@gmail.com', '@outlook.com', '@yahoo.com', '@hotmail.com', 'space', '←']
   ];
 
   const handleFieldFocus = (fieldName: string) => {
@@ -44,6 +45,14 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
       // Close keyboard on Enter
       setShowKeyboard(false);
       setActiveField(null);
+    } else if (key === 'space') {
+      // Space
+      if (activeField) {
+        setDetails(prev => ({
+          ...prev,
+          [activeField]: String(prev[activeField as keyof typeof prev]) + ' '
+        }));
+      }
     } else if (key.startsWith('@')) {
       // Email domain shortcut
       if (activeField) {
@@ -55,19 +64,52 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
     } else if (key !== '⇧') {
       // Regular character
       if (activeField) {
+        const currentValue = String(details[activeField as keyof typeof details]);
+        let newValue = currentValue + key;
+        
+        // Format postal code for Canada (A1A 1A1)
+        if (activeField === 'postalCode') {
+          newValue = formatCanadianPostalCode(newValue);
+        }
+        
         setDetails(prev => ({
           ...prev,
-          [activeField]: String(prev[activeField as keyof typeof prev]) + key
+          [activeField]: newValue
         }));
       }
     }
+  };
+
+  // Format Canadian postal code (A1A 1A1)
+  const formatCanadianPostalCode = (value: string) => {
+    // Remove all spaces and make uppercase
+    const cleaned = value.replace(/\s/g, '').toUpperCase();
+    
+    // Limit to 6 characters (3 letters + 3 numbers)
+    const limited = cleaned.slice(0, 6);
+    
+    // Add space after 3rd character if we have more than 3 characters
+    if (limited.length > 3) {
+      return limited.slice(0, 3) + ' ' + limited.slice(3);
+    }
+    
+    return limited;
   };
 
   const handleContinue = () => {
     onContinue(details);
   };
 
-  const isValid = details.email.includes('@') && details.email.includes('.');
+  const isValidForm = () => {
+    // Email validation
+    const emailValid = details.email.includes('@') && details.email.includes('.');
+    
+    // Canadian postal code validation (A1A 1A1 format)
+    const postalCodePattern = /^[A-Z]\d[A-Z] \d[A-Z]\d$/;
+    const postalCodeValid = postalCodePattern.test(details.postalCode);
+    
+    return emailValid && postalCodeValid;
+  };
 
   // Define ticket and add-on items (same as TicketSelectionScreen)
   const tickets = [
@@ -154,9 +196,23 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
               )}
             </div>
 
+            <div className="form-field">
+              <label>Postal code* (Canadian format: A1A 1A1)</label>
+              <input
+                type="text"
+                placeholder="A1A 1A1"
+                value={details.postalCode}
+                onFocus={() => handleFieldFocus('postalCode')}
+                readOnly
+              />
+              {details.postalCode && /^[A-Z]\d[A-Z] \d[A-Z]\d$/.test(details.postalCode) && (
+                <span className="validation-check">✓</span>
+              )}
+            </div>
+
             <button 
               className="continue-button"
-              disabled={!isValid}
+              disabled={!isValidForm()}
               onClick={handleContinue}
             >
               Continue
@@ -167,8 +223,10 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
             <div className="keyboard-overlay">
               <div className="virtual-keyboard">
                 <div className="keyboard-header">
-                  <span>Enter your email address</span>
-                  <button 
+                  <span>
+                    {activeField === 'email' ? 'Enter your email address' : 'Enter your postal code (A1A 1A1)'}
+                  </span>
+                  <button
                     className="keyboard-close"
                     onClick={() => {
                       setShowKeyboard(false);
@@ -180,9 +238,14 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
                 </div>
                 
                 <div className="typing-display">
-                  <div className="typing-label">Email address:</div>
+                  <div className="typing-label">
+                    {activeField === 'email' ? 'Email address:' : 'Postal code (A1A 1A1):'}
+                  </div>
                   <div className="typing-input">
-                    {details.email || "Start typing..."}
+                    {activeField === 'email' 
+                      ? (details.email || "Start typing...")
+                      : (details.postalCode || "A1A 1A1")
+                    }
                     <span className="typing-cursor">|</span>
                   </div>
                 </div>
