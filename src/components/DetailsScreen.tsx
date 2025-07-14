@@ -32,7 +32,7 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
     ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'],
     ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
     ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
-    ['z', 'x', 'c', 'v', 'b', 'n', 'm', 'space', '←']
+    ['z', 'x', 'c', 'v', 'b', 'n', 'm', '←']
   ];
 
   const getCurrentKeyboardLayout = () => {
@@ -59,19 +59,8 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
       setShowKeyboard(false);
       setActiveField(null);
     } else if (key === 'space') {
-      // Space handling
-      if (activeField === 'postalCode') {
-        // For postal code, only allow space at position 3 (after A1A)
-        const currentValue = String(details[activeField]);
-        const withoutSpaces = currentValue.replace(/\s/g, '');
-        if (withoutSpaces.length === 3 && !currentValue.includes(' ')) {
-          setDetails(prev => ({
-            ...prev,
-            [activeField]: currentValue + ' '
-          }));
-        }
-      } else if (activeField === 'email') {
-        // For email, just add space
+      // Space handling (only for email field)
+      if (activeField === 'email') {
         setDetails(prev => ({
           ...prev,
           [activeField]: String(prev[activeField as keyof typeof prev]) + ' '
@@ -90,13 +79,17 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
       if (activeField) {
         const currentValue = String(details[activeField as keyof typeof details]);
         
-        // Format postal code for Canada (A1A 1A1) with real-time validation
         if (activeField === 'postalCode') {
-          const newValue = formatCanadianPostalCode(key, currentValue);
-          setDetails(prev => ({
-            ...prev,
-            [activeField]: newValue
-          }));
+          // Simple postal code - just allow 6 alphanumeric characters
+          if (currentValue.length < 6 && /[A-Za-z0-9]/.test(key)) {
+            setDetails(prev => ({
+              ...prev,
+              [activeField]: currentValue + key.toUpperCase()
+            }));
+          } else if (currentValue.length >= 6) {
+            setFormatError(true);
+            setTimeout(() => setFormatError(false), 300);
+          }
         } else {
           // For email field, just add the character
           setDetails(prev => ({
@@ -163,9 +156,8 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
     // Email validation
     const emailValid = details.email.includes('@') && details.email.includes('.');
     
-    // Canadian postal code validation (A1A 1A1 format)
-    const postalCodePattern = /^[A-Z]\d[A-Z] \d[A-Z]\d$/;
-    const postalCodeValid = postalCodePattern.test(details.postalCode);
+    // Simple postal code validation - just 6 alphanumeric characters
+    const postalCodeValid = details.postalCode.length === 6 && /^[A-Z0-9]{6}$/.test(details.postalCode);
     
     return emailValid && postalCodeValid;
   };
@@ -256,16 +248,16 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
             </div>
 
             <div className="form-field">
-              <label>Postal code* (Canadian format: A1A 1A1)</label>
+              <label>Postal code* (6 characters)</label>
               <input
                 type="text"
-                placeholder="A1A 1A1"
+                placeholder="6 characters"
                 value={details.postalCode}
                 onFocus={() => handleFieldFocus('postalCode')}
                 className={`${formatError ? 'format-error' : ''}`}
                 readOnly
               />
-              {details.postalCode && /^[A-Z]\d[A-Z] \d[A-Z]\d$/.test(details.postalCode) && (
+              {details.postalCode && details.postalCode.length === 6 && (
                 <span className="validation-check">✓</span>
               )}
             </div>
@@ -284,7 +276,7 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
               <div className="virtual-keyboard">
                 <div className="keyboard-header">
                   <span>
-                    {activeField === 'email' ? 'Enter your email address' : 'Enter your postal code (A1A 1A1)'}
+                    {activeField === 'email' ? 'Enter your email address' : 'Enter your postal code (6 characters)'}
                   </span>
                   <button
                     className="keyboard-close"
@@ -299,12 +291,12 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
                 
                 <div className={`typing-display ${formatError ? 'typing-error' : ''}`}>
                   <div className="typing-label">
-                    {activeField === 'email' ? 'Email address:' : 'Postal code (A1A 1A1):'}
+                    {activeField === 'email' ? 'Email address:' : 'Postal code (6 characters):'}
                   </div>
                   <div className="typing-input">
                     {activeField === 'email' 
                       ? (details.email || "Start typing...")
-                      : (details.postalCode || "A1A 1A1")
+                      : (details.postalCode || "6 characters")
                     }
                     <span className="typing-cursor">|</span>
                   </div>
