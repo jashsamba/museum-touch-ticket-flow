@@ -64,10 +64,10 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
         // For postal code, only allow space at position 3 (after A1A)
         const currentValue = String(details[activeField]);
         const withoutSpaces = currentValue.replace(/\s/g, '');
-        if (withoutSpaces.length === 3) {
+        if (withoutSpaces.length === 3 && !currentValue.includes(' ')) {
           setDetails(prev => ({
             ...prev,
-            [activeField]: withoutSpaces + ' '
+            [activeField]: currentValue + ' '
           }));
         }
       } else if (activeField === 'email') {
