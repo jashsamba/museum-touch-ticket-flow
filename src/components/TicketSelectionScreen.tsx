@@ -66,13 +66,11 @@ const TicketSelectionScreen: React.FC<TicketSelectionScreenProps> = ({ onContinu
     
     const subtotal = ticketTotal + addOnTotal;
     const tax = subtotal * 0.13; // 13% tax
-    const serviceFee = 1.14;
     
     return {
       subtotal: subtotal.toFixed(2),
       tax: tax.toFixed(2),
-      serviceFee: serviceFee.toFixed(2),
-      total: (subtotal + tax + serviceFee).toFixed(2)
+      total: (subtotal + tax).toFixed(2) // No service fee in display
     };
   };
 
@@ -245,10 +243,6 @@ const TicketSelectionScreen: React.FC<TicketSelectionScreenProps> = ({ onContinu
             <div className="summary-line">
               <span>{t('selectedTax')}</span>
               <span>${totals.tax}</span>
-            </div>
-            <div className="summary-line">
-              <span>{t('serviceFee')}</span>
-              <span>${totals.serviceFee}</span>
             </div>
             <div className="summary-line total">
               <span>{t('totalIncTax')}</span>
