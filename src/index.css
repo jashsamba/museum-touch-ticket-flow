@@ -121,6 +121,21 @@
   100% { transform: translateY(-4px) scale(1.02); }
 }
 
+@keyframes flicker {
+  0%, 100% { 
+    background-color: hsl(var(--background));
+    border-color: hsl(var(--border));
+  }
+  25%, 75% { 
+    background-color: hsl(var(--destructive) / 0.1);
+    border-color: hsl(var(--destructive));
+  }
+  50% { 
+    background-color: hsl(var(--destructive) / 0.2);
+    border-color: hsl(var(--destructive));
+  }
+}
+
 /* Utility classes for enhanced animations */
 .animate-ripple {
   animation: ripple 0.6s ease-out;
@@ -132,6 +147,10 @@
 
 .animate-number-pop {
   animation: number-pop 0.3s ease-out;
+}
+
+.animate-flicker {
+  animation: flicker 0.3s ease-in-out;
 }
 
 .hover-lift {
@@ -165,6 +184,56 @@
 
 .elastic-bounce {
   transition: var(--transition-bounce);
+}
+
+/* Send Receipt Button Styles */
+.send-receipt-button {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  border-radius: 0.5rem;
+  transition: var(--transition-smooth);
+  cursor: pointer;
+  border: none;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.send-receipt-button:hover:not(:disabled) {
+  transform: scale(1.05);
+  box-shadow: var(--shadow-glow);
+}
+
+.send-receipt-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.send-receipt-button.sent {
+  background-color: hsl(142 76% 36%);
+}
+
+.send-receipt-button.sent:hover {
+  background-color: hsl(142 76% 36%);
+}
+
+.mini-spinner {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid white;
+  border-top: 2px solid transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-right: 0.5rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 /* Definition of the design system. All colors, gradients, fonts, etc should be defined here. */

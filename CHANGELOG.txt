@@ -15,6 +15,21 @@ CURRENT SESSION CHANGES:
   * Enhanced EnhancedQuantityControl with button press feedback and spring animations
   * Added utility classes for hover effects and smooth transitions
 
+- Enhanced Postal Code Validation with Flicker Animation:
+  * Enforced Canadian postal code format (A1A 1A1) with position-based validation
+  * Added flicker animation when user types wrong character at wrong position
+  * Enhanced format validation to ensure letters at positions 0,2,5 and numbers at 1,4,6
+  * Auto-insert space after 3rd character for proper formatting
+  * Updated placeholders and labels to show A1A 1A1 format
+
+- N8N Email Integration for Receipt Automation:
+  * Added "Send Receipt" button in CheckoutScreen during payment processing
+  * Integrated email extraction from DetailsScreen for automated workflow
+  * Implemented one-time usage with button state management (disabled after sending)
+  * Added success/error feedback with visual states (sending spinner, sent checkmark)
+  * Connected to N8N webhook for email automation workflow
+  * Enhanced button styling with hover effects and state transitions
+
 1. COMPLETION SCREEN ENHANCEMENTS (2025-07-14)
    - Centered completion message and button on the page
    - Changed "Start New Purchase" button to white background with red text/border

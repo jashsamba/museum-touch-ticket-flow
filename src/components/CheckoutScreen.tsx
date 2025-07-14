@@ -7,11 +7,14 @@ interface CheckoutScreenProps {
   totals: any;
   quantities: {[key: string]: number};
   addOns: {[key: string]: number};
+  userEmail?: string;
 }
 
-const CheckoutScreen: React.FC<CheckoutScreenProps> = ({ onComplete, onBack, totals, quantities, addOns }) => {
+const CheckoutScreen: React.FC<CheckoutScreenProps> = ({ onComplete, onBack, totals, quantities, addOns, userEmail }) => {
   const { t } = useLanguage();
   const [processing, setProcessing] = useState(false);
+  const [emailSent, setEmailSent] = useState(false);
+  const [emailSending, setEmailSending] = useState(false);
 
   // Define ticket and add-on items (same as TicketSelectionScreen)
   const tickets = [
@@ -68,6 +71,41 @@ const CheckoutScreen: React.FC<CheckoutScreenProps> = ({ onComplete, onBack, tot
 
   const cartItems = generateCartItems();
   const totalItemCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+
+  const handleSendReceipt = async () => {
+    if (!userEmail || emailSent || emailSending) return;
+    
+    setEmailSending(true);
+    
+    try {
+      // Call N8N webhook
+      const webhookUrl = 'https://your-n8n-webhook-url.com/webhook/receipt';
+      
+      const response = await fetch(webhookUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        mode: 'no-cors',
+        body: JSON.stringify({
+          email: userEmail,
+          orderDetails: {
+            tickets: quantities,
+            addOns: addOns,
+            totals: totals
+          },
+          timestamp: new Date().toISOString()
+        })
+      });
+      
+      setEmailSent(true);
+      console.log('Receipt email sent to:', userEmail);
+    } catch (error) {
+      console.error('Failed to send receipt email:', error);
+    } finally {
+      setEmailSending(false);
+    }
+  };
 
   useEffect(() => {
     // Simulate payment processing after 3 seconds
@@ -126,6 +164,24 @@ const CheckoutScreen: React.FC<CheckoutScreenProps> = ({ onComplete, onBack, tot
                 <div className="processing-message">
                   <div className="spinner"></div>
                   <p>Processing payment...</p>
+                  {userEmail && (
+                    <button 
+                      className={`send-receipt-button ${emailSent ? 'sent' : ''} ${emailSending ? 'sending' : ''}`}
+                      onClick={handleSendReceipt}
+                      disabled={emailSent || emailSending}
+                    >
+                      {emailSending ? (
+                        <>
+                          <div className="mini-spinner"></div>
+                          Sending...
+                        </>
+                      ) : emailSent ? (
+                        <>✓ Email Sent</>
+                      ) : (
+                        'Send Receipt'
+                      )}
+                    </button>
+                  )}
                 </div>
               ) : (
                 <p>Please follow instructions<br/>on the PIN pad terminal</p>

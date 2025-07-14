@@ -179,6 +179,7 @@ const KioskInterface = () => {
             totals={flowData.selections?.totals}
             quantities={cartQuantities}
             addOns={cartAddOns}
+            userEmail={flowData.details?.email}
           />
         )}
         

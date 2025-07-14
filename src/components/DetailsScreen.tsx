@@ -80,16 +80,12 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
         const currentValue = String(details[activeField as keyof typeof details]);
         
         if (activeField === 'postalCode') {
-          // Simple postal code - just allow 6 alphanumeric characters
-          if (currentValue.length < 6 && /[A-Za-z0-9]/.test(key)) {
-            setDetails(prev => ({
-              ...prev,
-              [activeField]: currentValue + key.toUpperCase()
-            }));
-          } else if (currentValue.length >= 6) {
-            setFormatError(true);
-            setTimeout(() => setFormatError(false), 300);
-          }
+          // Enhanced postal code validation - Canadian format A1A 1A1
+          const newValue = formatCanadianPostalCode(key, currentValue);
+          setDetails(prev => ({
+            ...prev,
+            [activeField]: newValue
+          }));
         } else {
           // For email field, just add the character
           setDetails(prev => ({
@@ -156,8 +152,9 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
     // Email validation
     const emailValid = details.email.includes('@') && details.email.includes('.');
     
-    // Simple postal code validation - just 6 alphanumeric characters
-    const postalCodeValid = details.postalCode.length === 6 && /^[A-Z0-9]{6}$/.test(details.postalCode);
+    // Enhanced postal code validation - Canadian format A1A 1A1
+    const postalCodeClean = details.postalCode.replace(/\s/g, '');
+    const postalCodeValid = postalCodeClean.length === 6 && /^[A-Z]\d[A-Z]\d[A-Z]\d$/.test(postalCodeClean);
     
     return emailValid && postalCodeValid;
   };
@@ -248,16 +245,16 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
             </div>
 
             <div className="form-field">
-              <label>Postal code* (6 characters)</label>
+              <label>Postal code* (A1A 1A1 format)</label>
               <input
                 type="text"
-                placeholder="6 characters"
+                placeholder="A1A 1A1"
                 value={details.postalCode}
                 onFocus={() => handleFieldFocus('postalCode')}
-                className={`${formatError ? 'format-error' : ''}`}
+                className={`${formatError ? 'format-error flicker' : ''}`}
                 readOnly
               />
-              {details.postalCode && details.postalCode.length === 6 && (
+              {details.postalCode && details.postalCode.replace(/\s/g, '').length === 6 && /^[A-Z]\d[A-Z]\d[A-Z]\d$/.test(details.postalCode.replace(/\s/g, '')) && (
                 <span className="validation-check">✓</span>
               )}
             </div>
@@ -276,7 +273,7 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
               <div className="virtual-keyboard">
                 <div className="keyboard-header">
                   <span>
-                    {activeField === 'email' ? 'Enter your email address' : 'Enter your postal code (6 characters)'}
+                    {activeField === 'email' ? 'Enter your email address' : 'Enter your postal code (A1A 1A1 format)'}
                   </span>
                   <button
                     className="keyboard-close"
@@ -291,12 +288,12 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
                 
                 <div className={`typing-display ${formatError ? 'typing-error' : ''}`}>
                   <div className="typing-label">
-                    {activeField === 'email' ? 'Email address:' : 'Postal code (6 characters):'}
+                    {activeField === 'email' ? 'Email address:' : 'Postal code (A1A 1A1):'}
                   </div>
                   <div className="typing-input">
                     {activeField === 'email' 
                       ? (details.email || "Start typing...")
-                      : (details.postalCode || "6 characters")
+                      : (details.postalCode || "A1A 1A1")
                     }
                     <span className="typing-cursor">|</span>
                   </div>
