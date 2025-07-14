@@ -19,13 +19,25 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
   const [showKeyboard, setShowKeyboard] = useState(false);
   const [activeField, setActiveField] = useState<string | null>(null);
 
-  const keyboardLayout = [
+  const emailKeyboardLayout = [
     ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'],
     ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
     ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
     ['⇧', 'z', 'x', 'c', 'v', 'b', 'n', 'm', '-', '⇧'],
     ['@gmail.com', '@outlook.com', '@yahoo.com', '@hotmail.com', 'space', '←']
   ];
+
+  const postalCodeKeyboardLayout = [
+    ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'],
+    ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
+    ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
+    ['z', 'x', 'c', 'v', 'b', 'n', 'm', 'space', '←']
+  ];
+
+  // Get the appropriate keyboard layout based on active field
+  const getCurrentKeyboardLayout = () => {
+    return activeField === 'postalCode' ? postalCodeKeyboardLayout : emailKeyboardLayout;
+  };
 
   const handleFieldFocus = (fieldName: string) => {
     setActiveField(fieldName);
@@ -54,8 +66,8 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
         }));
       }
     } else if (key.startsWith('@')) {
-      // Email domain shortcut
-      if (activeField) {
+      // Email domain shortcut (only for email field)
+      if (activeField === 'email') {
         setDetails(prev => ({
           ...prev,
           [activeField]: String(prev[activeField as keyof typeof prev]) + key
@@ -250,15 +262,15 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
                   </div>
                 </div>
                 
-                {keyboardLayout.map((row, rowIndex) => (
+                {getCurrentKeyboardLayout().map((row, rowIndex) => (
                   <div key={rowIndex} className="keyboard-row">
                     {row.map((key, keyIndex) => (
                       <button
                         key={keyIndex}
-                        className={`keyboard-key ${key.startsWith('@') ? 'email-domain-key' : ''}`}
+                        className={`keyboard-key ${key.startsWith('@') ? 'email-domain-key' : ''} ${key === 'space' ? 'space-key' : ''}`}
                         onClick={() => handleKeyPress(key)}
                       >
-                        {key}
+                        {key === 'space' ? 'SPACE' : key}
                       </button>
                     ))}
                   </div>

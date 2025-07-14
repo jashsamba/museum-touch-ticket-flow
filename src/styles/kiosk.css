@@ -1088,6 +1088,18 @@
   border-color: #218838;
 }
 
+.space-key {
+  min-width: 120px;
+  background: #f8f9fa;
+  color: #666;
+  font-weight: 600;
+}
+
+.space-key:hover {
+  background: #e9ecef;
+  border-color: #E53E3E;
+}
+
 /* ===============================
    CHECKOUT SCREEN
    =============================== */
