@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import EnhancedQuantityControl from './EnhancedQuantityControl';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface TicketItem {
   id: string;
@@ -21,22 +22,23 @@ interface TicketSelectionScreenProps {
 }
 
 const TicketSelectionScreen: React.FC<TicketSelectionScreenProps> = ({ onContinue, onBack }) => {
+  const { t } = useLanguage();
   const [quantities, setQuantities] = useState<{[key: string]: number}>({});
   const [addOns, setAddOns] = useState<{[key: string]: number}>({});
 
   const tickets: TicketItem[] = [
-    { id: 'adult-general', name: 'Adult General Admission (17+)', price: 19.99, details: 'Details >' },
-    { id: 'child-general', name: 'Child General Admission (4-17)', price: 14.99, details: 'Details >' },
-    { id: 'senior-general', name: 'Senior General Admission (65+)', price: 16.99, details: 'Details >' },
-    { id: 'student-general', name: 'Student General Admission', price: 16.99, details: 'Details >' }
+    { id: 'adult-general', name: t('adultGeneral'), price: 19.99, details: t('details') },
+    { id: 'child-general', name: t('childGeneral'), price: 14.99, details: t('details') },
+    { id: 'senior-general', name: t('seniorGeneral'), price: 16.99, details: t('details') },
+    { id: 'student-general', name: t('studentGeneral'), price: 16.99, details: t('details') }
   ];
 
   const addOnItems: AddOnItem[] = [
-    { id: 'donation-5', name: '$5.00 Donation "Recommended"', price: 5.00 },
-    { id: 'donation-10', name: '$10.00 Donation', price: 10.00 },
-    { id: 'donation-25', name: '$25.00 Donation', price: 25.00 },
-    { id: 'field-trip', name: 'Donation for 1 student to attend a field trip free of charge!', price: 17.00 },
-    { id: 'bus-subsidy', name: 'Sponsor a bus! Transportation subsidy for 1 class field trip.', price: 15.00 }
+    { id: 'donation-5', name: t('donation5'), price: 5.00 },
+    { id: 'donation-10', name: t('donation10'), price: 10.00 },
+    { id: 'donation-25', name: t('donation25'), price: 25.00 },
+    { id: 'field-trip', name: t('fieldTrip'), price: 17.00 },
+    { id: 'bus-subsidy', name: t('busSubsidy'), price: 15.00 }
   ];
 
   const updateQuantity = (id: string, change: number, isAddOn: boolean = false) => {
@@ -88,7 +90,7 @@ const TicketSelectionScreen: React.FC<TicketSelectionScreenProps> = ({ onContinu
   return (
     <div className="screen-container">
       <div className="museum-header">
-        <button className="back-button" onClick={onBack}>← Checkout</button>
+        <button className="back-button" onClick={onBack}>← {t('checkout')}</button>
         <div className="date-time">11:00AM | September 23, 2025</div>
       </div>
 
@@ -102,12 +104,12 @@ const TicketSelectionScreen: React.FC<TicketSelectionScreenProps> = ({ onContinu
           </div>
 
           <div className="ticket-info">
-            <h2>THEMUSEUM General Admission</h2>
-            <p>Purchase tickets for general admission to THEMUSEUM as advance listed. Please print "read more" for details. Read more</p>
+            <h2>{t('museumGeneralAdmission')}</h2>
+            <p>{t('ticketDescription')}</p>
           </div>
 
           <div className="ticket-section">
-            <h3>Select Tickets</h3>
+            <h3>{t('selectTicketsTitle')}</h3>
             {tickets.map(ticket => (
               <div key={ticket.id} className="ticket-item">
                 <div className="ticket-details">
@@ -125,12 +127,12 @@ const TicketSelectionScreen: React.FC<TicketSelectionScreenProps> = ({ onContinu
           </div>
 
           <div className="addons-section">
-            <h3>Select Add-ons</h3>
+            <h3>{t('selectAddons')}</h3>
             <div className="donation-header">
-              <div className="donate-button">DONATE</div>
-              <p>Thanks for your generous support of THEMUSEUM! It's thanks to you that THEMUSEUM continues to, grow, inspire and enlighten.</p>
-              <p>Donations of $10 or greater are eligible for a tax receipt.</p>
-              <p>Registered Name: THEMUSEUM of Hoax Transcending Objects Charitable Registration Number: 80709586001</p>
+              <div className="donate-button">{t('donate')}</div>
+              <p>{t('donationText1')}</p>
+              <p>{t('donationText2')}</p>
+              <p>{t('donationText3')}</p>
             </div>
             
             {addOnItems.map(addOn => (
@@ -149,15 +151,15 @@ const TicketSelectionScreen: React.FC<TicketSelectionScreenProps> = ({ onContinu
           </div>
 
           <div className="cart-total-bottom">
-            <div className="cart-total-text">Cart total: ${totals.total}</div>
+            <div className="cart-total-text">{t('cartTotal')}: ${totals.total}</div>
             <div className="action-buttons">
-              <button className="continue-shopping">Continue Shopping</button>
+              <button className="continue-shopping">{t('continueShopping')}</button>
               <button 
                 className={`checkout-button ${hasSelections ? 'button-pulse' : ''}`}
                 disabled={!hasSelections}
                 onClick={handleContinue}
               >
-                Checkout
+                {t('checkoutButton')}
               </button>
             </div>
           </div>
@@ -165,8 +167,8 @@ const TicketSelectionScreen: React.FC<TicketSelectionScreenProps> = ({ onContinu
 
         <div className="cart-sidebar">
           <div className="cart-header">
-            <span className="cart-label">Your Cart</span>
-            <span className="item-count">1 ITEM</span>
+            <span className="cart-label">{t('yourCart')}</span>
+            <span className="item-count">1 {t('item')}</span>
           </div>
           
           <div className="cart-items">
@@ -175,7 +177,7 @@ const TicketSelectionScreen: React.FC<TicketSelectionScreenProps> = ({ onContinu
               <div className="item-details">
                 <div>THEMUSEUM General</div>
                 <div>Adult General Admission (1...)</div>
-                <button className="edit-button">Edit</button>
+                <button className="edit-button">{t('edit')}</button>
               </div>
               <div className="item-price">${totals.subtotal}</div>
             </div>
@@ -185,7 +187,7 @@ const TicketSelectionScreen: React.FC<TicketSelectionScreenProps> = ({ onContinu
               <div className="item-details">
                 <div>Donation Add-On</div>
                 <div>$5.00 Donation "Recommend...</div>
-                <button className="edit-button">Edit</button>
+                <button className="edit-button">{t('edit')}</button>
               </div>
               <div className="item-price">$5.00</div>
             </div>
@@ -193,19 +195,19 @@ const TicketSelectionScreen: React.FC<TicketSelectionScreenProps> = ({ onContinu
 
           <div className="cart-summary">
             <div className="summary-line">
-              <span>Subtotal</span>
+              <span>{t('subtotal')}</span>
               <span>${totals.subtotal}</span>
             </div>
             <div className="summary-line">
-              <span>Selected tax</span>
+              <span>{t('selectedTax')}</span>
               <span>${totals.tax}</span>
             </div>
             <div className="summary-line">
-              <span>Service fee</span>
+              <span>{t('serviceFee')}</span>
               <span>${totals.serviceFee}</span>
             </div>
             <div className="summary-line total">
-              <span>Total (inc. tax)</span>
+              <span>{t('totalIncTax')}</span>
               <span>${totals.total}</span>
             </div>
           </div>
@@ -215,7 +217,7 @@ const TicketSelectionScreen: React.FC<TicketSelectionScreenProps> = ({ onContinu
             disabled={!hasSelections}
             onClick={handleContinue}
           >
-            Checkout
+            {t('checkoutButton')}
           </button>
         </div>
       </div>

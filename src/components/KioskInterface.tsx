@@ -8,6 +8,8 @@ import DetailsScreen from './DetailsScreen';
 import CheckoutScreen from './CheckoutScreen';
 import CompletionScreen from './CompletionScreen';
 import ProgressIndicator from './ProgressIndicator';
+import LanguageSelector from './LanguageSelector';
+import { useLanguage } from '../contexts/LanguageContext';
 
 export interface FlowData {
   selections?: any;
@@ -16,13 +18,14 @@ export interface FlowData {
 }
 
 const KioskInterface = () => {
+  const { t } = useLanguage();
   const [currentScreen, setCurrentScreen] = useState<'landing' | 'tickets' | 'details' | 'checkout' | 'completion'>('landing');
   const [flowData, setFlowData] = useState<FlowData>({});
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [isNavigatingBack, setIsNavigatingBack] = useState(false);
 
-  const steps = ['Select Tickets', 'Your Details', 'Payment', 'Complete'];
+  const steps = [t('selectTickets'), t('yourDetails'), t('payment'), t('complete')];
   const getStepNumber = () => {
     switch (currentScreen) {
       case 'landing': return 0;
@@ -111,6 +114,11 @@ const KioskInterface = () => {
 
   return (
     <div className="kiosk-container">
+      {/* Language selector always visible at top right */}
+      <div className="language-selector-wrapper">
+        <LanguageSelector />
+      </div>
+      
       {currentScreen !== 'landing' && currentScreen !== 'completion' && (
         <ProgressIndicator 
           currentStep={getStepNumber()}

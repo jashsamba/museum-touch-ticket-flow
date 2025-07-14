@@ -1,10 +1,12 @@
 import React from 'react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface CompletionScreenProps {
   onStartOver: () => void;
 }
 
 const CompletionScreen: React.FC<CompletionScreenProps> = ({ onStartOver }) => {
+  const { t } = useLanguage();
   return (
     <div className="screen-container">
       <div className="museum-header">
@@ -19,21 +21,20 @@ const CompletionScreen: React.FC<CompletionScreenProps> = ({ onStartOver }) => {
       
       <div className="completion-content fade-up">
         <div className="completion-message">
-          <p>Please take the receipt to<br/>
-          Guest Services and enjoy<br/>
-          your visit to THEMUSEUM.</p>
+          <p>{t('completionMessage')}</p>
           
-          <p className="email-backup">A backup receipt has been<br/>
-          sent to your email.</p>
+          <p className="email-backup">{t('emailBackup')}</p>
         </div>
         
-        <button 
-          className="start-over-button fade-up"
-          onClick={onStartOver}
-          style={{ animationDelay: '0.5s' }}
-        >
-          Start New Purchase
-        </button>
+        <div className="completion-button-container">
+          <button 
+            className="start-over-button fade-up"
+            onClick={onStartOver}
+            style={{ animationDelay: '0.5s' }}
+          >
+            {t('startNewPurchase')}
+          </button>
+        </div>
       </div>
     </div>
   );
