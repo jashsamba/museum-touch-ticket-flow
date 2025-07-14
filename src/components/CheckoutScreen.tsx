@@ -121,20 +121,32 @@ const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
   const totalItemCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
   const handleSecurePurchase = async () => {
-    if (!userEmail || !userDetails) {
-      setPurchaseError('Missing required customer information');
-      return;
-    }
+    // TODO: Re-enable validation when customer details are properly implemented
+    // if (!userEmail || !userDetails) {
+    //   setPurchaseError('Missing required customer information');
+    //   return;
+    // }
 
     try {
       setPurchaseError(null);
       
+      // For now, just simulate successful payment
+      setPaymentSuccessful(true);
+      console.log('Payment simulation completed successfully');
+      
+      // Auto-advance to completion after successful payment
+      setTimeout(() => {
+        onComplete();
+      }, 2000);
+      
+      // TODO: Implement actual secure purchase when customer details are ready
+      /*
       const purchaseData = {
-        first_name: userDetails.firstName,
-        last_name: userDetails.lastName,
-        email: userEmail,
-        contact_number: userDetails.contactNumber,
-        postal_code: userDetails.postalCode,
+        first_name: userDetails?.firstName || 'Guest',
+        last_name: userDetails?.lastName || 'User', 
+        email: userEmail || 'guest@example.com',
+        contact_number: userDetails?.contactNumber,
+        postal_code: userDetails?.postalCode,
         tickets: quantities,
         add_ons: addOns,
         totals: totals,
@@ -146,7 +158,6 @@ const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
         setPaymentSuccessful(true);
         console.log('Purchase completed successfully:', result.purchase_id);
         
-        // Auto-advance to completion after successful purchase
         setTimeout(() => {
           onComplete();
         }, 2000);
@@ -154,6 +165,7 @@ const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
         setPurchaseError(result.error || 'Purchase failed');
         console.error('Purchase failed:', result.error, result.details);
       }
+      */
     } catch (error) {
       console.error('Purchase processing error:', error);
       setPurchaseError('Network error. Please try again.');
