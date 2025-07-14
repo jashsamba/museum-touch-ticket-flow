@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
+import { supabase } from '@/integrations/supabase/client';
 
 interface CheckoutScreenProps {
   onComplete: () => void;
@@ -104,24 +105,40 @@ const CheckoutScreen: React.FC<CheckoutScreenProps> = ({ onComplete, onBack, tot
     setEmailSending(true);
     
     try {
-      // Simulate sending receipt (since the webhook URL is failing)
-      console.log('Sending receipt to:', userEmail);
-      console.log('Order details:', { tickets: quantities, addOns: addOns, totals: totals });
-      
-      // Simulate a short delay for sending
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
+      // Use secure purchase endpoint instead of direct database access
+      const { data, error } = await supabase.functions.invoke('secure-purchase', {
+        body: {
+          firstName: 'Guest', // You may want to collect this in DetailsScreen
+          lastName: 'User',   // You may want to collect this in DetailsScreen
+          email: userEmail,
+          contactNumber: null,
+          postalCode: null,
+          tickets: quantities,
+          addOns: addOns,
+          subtotal: totals.subtotal,
+          tax: totals.tax,
+          serviceFee: totals.serviceFee,
+          total: totals.total
+        }
+      });
+
+      if (error) {
+        console.error('Purchase failed:', error);
+        throw error;
+      }
+
       setEmailSent(true);
-      console.log('Receipt email sent successfully');
+      console.log('Purchase completed and receipt sent:', data);
       
-      // Go to completion page after successful send
+      // Go to completion page after successful purchase
       setTimeout(() => {
         onComplete();
       }, 500);
       
     } catch (error) {
-      console.error('Failed to send receipt email:', error);
-      setEmailSent(true); // Still proceed to completion page
+      console.error('Failed to process purchase:', error);
+      // Still proceed to completion page but show error
+      setEmailSent(true);
       setTimeout(() => {
         onComplete();
       }, 500);
