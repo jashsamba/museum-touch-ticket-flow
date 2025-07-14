@@ -6,18 +6,16 @@
  */
 
 export const SERVICES_CONFIG = {
-  // SECURITY: Webhook configuration moved to secure Edge Functions
-  // External service URLs should never be exposed in client-side code
+  // n8n Webhook Configuration
   N8N: {
-    // Webhook URLs are now stored securely in Supabase secrets
-    // and accessed only through secure Edge Functions
-    WEBHOOK_URL: '', // Removed for security
+    // Your n8n webhook URL for email receipts
+    WEBHOOK_URL: 'https://jaswanthbunny007.app.n8n.cloud/webhook-test/dcb032ef-7d63-4ef5-8a8a-35ae03fb51ad',
     
     // Backup webhook URL (optional)
     BACKUP_WEBHOOK_URL: '',
     
     // Enable/disable n8n integration
-    ENABLED: false, // Disabled until secure implementation
+    ENABLED: true,
     
     // Timeout for webhook requests (milliseconds)
     TIMEOUT: 10000
