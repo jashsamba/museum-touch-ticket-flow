@@ -28,17 +28,17 @@ const EnhancedQuantityControl: React.FC<EnhancedQuantityControlProps> = ({
   return (
     <div className={`enhanced-quantity-controls ${className}`}>
       <button 
-        className="quantity-btn quantity-btn-minus"
+        className="quantity-btn quantity-btn-minus hover-lift button-press transition-all duration-200 hover:shadow-md"
         onClick={() => handleUpdate(-1)}
         disabled={quantity <= 0}
       >
         <Minus size={16} />
       </button>
-      <span className={`quantity-display ${isAnimating ? 'count-animation' : ''}`}>
+      <span className={`quantity-display animate-number-pop ${isAnimating ? 'count-animation spring-bounce' : ''}`}>
         {quantity}
       </span>
       <button 
-        className="quantity-btn quantity-btn-plus"
+        className="quantity-btn quantity-btn-plus hover-lift button-press transition-all duration-200 hover:shadow-md hover-glow"
         onClick={() => handleUpdate(1)}
         disabled={quantity >= maxQuantity}
       >
