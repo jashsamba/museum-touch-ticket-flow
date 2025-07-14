@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
-import { SERVICES_CONFIG, getN8nWebhookUrl } from '../config/services';
-import ConfigPanel from './ConfigPanel';
+import { SERVICES_CONFIG, getN8nWebhookUrl } from '../lib/utils';
 
 interface CompletionScreenProps {
   onStartOver: () => void;
@@ -21,7 +20,6 @@ const CompletionScreen: React.FC<CompletionScreenProps> = ({ onStartOver, orderD
   const { t } = useLanguage();
   const [webhookUrl, setWebhookUrl] = useState(getN8nWebhookUrl());
   const [showWebhookConfig, setShowWebhookConfig] = useState(false);
-  const [showConfigPanel, setShowConfigPanel] = useState(false);
 
   // Send order data to n8n webhook
   const sendToN8n = async (webhookUrl: string) => {
@@ -113,13 +111,6 @@ const CompletionScreen: React.FC<CompletionScreenProps> = ({ onStartOver, orderD
               ⚙️ Configure n8n Webhook
             </button>
             
-            <button 
-              className="webhook-config-button"
-              onClick={() => setShowConfigPanel(true)}
-            >
-              🔧 All Settings
-            </button>
-            
             {webhookUrl && (
               <button 
                 className="webhook-trigger-button"
@@ -171,11 +162,6 @@ const CompletionScreen: React.FC<CompletionScreenProps> = ({ onStartOver, orderD
           )}
         </div>
       </div>
-      
-      <ConfigPanel 
-        isOpen={showConfigPanel}
-        onClose={() => setShowConfigPanel(false)}
-      />
     </div>
   );
 };
