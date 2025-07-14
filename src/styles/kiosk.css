@@ -973,6 +973,50 @@
   font-weight: 600;
 }
 
+.typing-display {
+  background: white;
+  border: 2px solid #E53E3E;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.typing-label {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 5px;
+}
+
+.typing-input {
+  font-size: 18px;
+  color: #333;
+  min-height: 24px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.typing-cursor {
+  animation: blink 1s infinite;
+  margin-left: 2px;
+  color: #E53E3E;
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+.keyboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
 .keyboard-close {
   background: #E53E3E;
   color: white;

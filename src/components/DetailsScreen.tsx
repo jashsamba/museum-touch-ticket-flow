@@ -178,6 +178,15 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
                     ✕
                   </button>
                 </div>
+                
+                <div className="typing-display">
+                  <div className="typing-label">Email address:</div>
+                  <div className="typing-input">
+                    {details.email || "Start typing..."}
+                    <span className="typing-cursor">|</span>
+                  </div>
+                </div>
+                
                 {keyboardLayout.map((row, rowIndex) => (
                   <div key={rowIndex} className="keyboard-row">
                     {row.map((key, keyIndex) => (
