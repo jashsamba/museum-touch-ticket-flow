@@ -1,0 +1,60 @@
+KIOSK PROJECT - CHANGE LOG
+==========================
+
+Last Updated: 2025-07-14
+
+RECENT CHANGES:
+--------------
+
+1. VISUAL ENHANCEMENTS (Latest Implementation)
+   - Added smooth screen transitions with fade effects
+   - Implemented button hover animations and loading states
+   - Created progress indicator component for 5-step flow
+   - Enhanced quantity controls with better UX
+   - Added gradient backgrounds and modern styling
+
+2. LANGUAGE SUPPORT (Latest Implementation)
+   - Added bilingual support (English/French)
+   - Created language selector always visible in top-right corner
+   - Implemented LanguageContext for state management
+   - Translated all UI text and labels
+
+3. LAYOUT FIXES (Latest Implementation)
+   - Fixed time display overlap with language selector
+   - Centered "Start New Purchase" button on completion screen
+   - Improved responsive positioning for mobile devices
+   - Enhanced header layout with proper spacing
+
+4. CORE FEATURES (Previous Implementation)
+   - 5-step kiosk flow: Landing → Ticket Selection → Details → Checkout → Completion
+   - Supabase integration for data persistence
+   - Responsive design with mobile support
+   - Progress tracking through steps
+
+FILES MODIFIED IN LATEST SESSION:
+---------------------------------
+- src/index.css (design tokens and animations)
+- src/components/ProgressIndicator.tsx (new)
+- src/components/LanguageSelector.tsx (new)
+- src/contexts/LanguageContext.tsx (new)
+- src/components/KioskInterface.tsx
+- src/components/LandingScreen.tsx
+- src/components/TicketSelectionScreen.tsx
+- src/components/CompletionScreen.tsx
+- src/components/EnhancedQuantityControl.tsx (new)
+- src/styles/kiosk.css
+- src/main.tsx
+
+GIT SYNC STATUS:
+---------------
+✓ All changes automatically synced to GitHub via Lovable's bidirectional sync
+✓ Real-time synchronization enabled
+✓ No manual push required
+
+NEXT POTENTIAL IMPROVEMENTS:
+---------------------------
+- Additional language support
+- Enhanced accessibility features
+- Advanced payment integration
+- Custom theming options
+- Analytics integration
