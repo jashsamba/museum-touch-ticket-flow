@@ -17,7 +17,7 @@ interface CompletionScreenProps {
 
 const CompletionScreen: React.FC<CompletionScreenProps> = ({ onStartOver, orderDetails }) => {
   const { t } = useLanguage();
-  const [webhookUrl, setWebhookUrl] = useState('');
+  const [webhookUrl, setWebhookUrl] = useState('https://jaswanthbunny007.app.n8n.cloud/webhook-test/dcb032ef-7d63-4ef5-8a8a-35ae03fb51ad');
   const [showWebhookConfig, setShowWebhookConfig] = useState(false);
 
   // Send order data to n8n webhook
@@ -52,9 +52,12 @@ const CompletionScreen: React.FC<CompletionScreenProps> = ({ onStartOver, orderD
   // Auto-send to webhook if URL is configured
   useEffect(() => {
     const savedWebhookUrl = localStorage.getItem('n8n-webhook-url');
-    if (savedWebhookUrl && orderDetails) {
-      setWebhookUrl(savedWebhookUrl);
-      sendToN8n(savedWebhookUrl);
+    const urlToUse = savedWebhookUrl || webhookUrl; // Use saved URL or default
+    
+    if (urlToUse && orderDetails) {
+      setWebhookUrl(urlToUse);
+      sendToN8n(urlToUse);
+      console.log('Auto-sending order data to n8n:', orderDetails);
     }
   }, [orderDetails]);
 
@@ -123,11 +126,29 @@ const CompletionScreen: React.FC<CompletionScreenProps> = ({ onStartOver, orderD
               <p>Enter your n8n webhook URL to automatically send email receipts:</p>
               <input
                 type="url"
-                placeholder="https://your-n8n-instance.com/webhook/your-webhook-id"
+                placeholder="https://jaswanthbunny007.app.n8n.cloud/webhook-test/dcb032ef-7d63-4ef5-8a8a-35ae03fb51ad"
                 value={webhookUrl}
                 onChange={(e) => setWebhookUrl(e.target.value)}
                 className="webhook-input"
               />
+              
+              <div className="webhook-example">
+                <details>
+                  <summary>📋 Sample JSON that will be sent to your n8n workflow:</summary>
+                  <pre className="json-preview">
+{JSON.stringify({
+  timestamp: new Date().toISOString(),
+  order_id: `ORDER-${Date.now()}`,
+  customer_email: orderDetails?.email || "customer@example.com",
+  tickets: orderDetails?.tickets || {"adult-general": 2},
+  addOns: orderDetails?.addOns || {"donation-10": 1},
+  totals: orderDetails?.totals || {subtotal: "49.97", tax: "6.50", total: "56.47"},
+  museum: "THEMUSEUM",
+  triggered_from: window.location.origin,
+}, null, 2)}
+                  </pre>
+                </details>
+              </div>
               <div className="webhook-actions">
                 <button onClick={handleWebhookSave} className="save-button">
                   Save & Test

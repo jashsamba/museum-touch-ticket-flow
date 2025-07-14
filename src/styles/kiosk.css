@@ -1386,14 +1386,35 @@
   background: #e8e8e8;
 }
 
-/* ===============================
-   RESPONSIVE DESIGN
-   =============================== */
+.webhook-example {
+  margin: 15px 0;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+}
 
-@media (max-width: 1024px) {
-  50% {
-    transform: scale(1.05);
-  }
+.webhook-example summary {
+  padding: 10px 15px;
+  background: #f8f9fa;
+  cursor: pointer;
+  font-weight: 600;
+  color: #E53E3E;
+}
+
+.webhook-example summary:hover {
+  background: #e9ecef;
+}
+
+.json-preview {
+  background: #1e1e1e;
+  color: #f8f8f2;
+  padding: 15px;
+  margin: 0;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 12px;
+  line-height: 1.4;
+  overflow-x: auto;
+  white-space: pre;
 }
 
 /* ===============================
