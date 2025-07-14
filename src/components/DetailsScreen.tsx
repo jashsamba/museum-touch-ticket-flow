@@ -131,7 +131,7 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
   return (
     <div className="screen-container">
       <div className="museum-header">
-        <button className="back-button" onClick={onBack}>← Your Details</button>
+        <button className="back-button" onClick={onBack}>← Checkout</button>
         <div className="date-time">11:00AM | September 23, 2025</div>
       </div>
 
