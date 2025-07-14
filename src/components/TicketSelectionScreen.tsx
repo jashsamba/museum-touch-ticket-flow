@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import EnhancedQuantityControl from './EnhancedQuantityControl';
 import { useLanguage } from '../contexts/LanguageContext';
 
@@ -32,6 +32,31 @@ const TicketSelectionScreen: React.FC<TicketSelectionScreenProps> = ({
   onUpdateQuantity 
 }) => {
   const { t } = useLanguage();
+  const [currentTime, setCurrentTime] = useState(new Date());
+
+  // Update time every second
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  // Format time as "11:00AM | September 23, 2025"
+  const formatDateTime = (date: Date) => {
+    const timeString = date.toLocaleTimeString('en-US', { 
+      hour: 'numeric', 
+      minute: '2-digit',
+      hour12: true 
+    });
+    const dateString = date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+    return `${timeString} | ${dateString}`;
+  };
 
   const tickets: TicketItem[] = [
     { id: 'adult-general', name: t('adultGeneral'), price: 19.99, details: t('details') },
@@ -122,8 +147,8 @@ const TicketSelectionScreen: React.FC<TicketSelectionScreenProps> = ({
   return (
     <div className="screen-container">
       <div className="museum-header">
-        <button className="back-button" onClick={onBack}>← Main Screen</button>
-        <div className="date-time">11:00AM | September 23, 2025</div>
+        <button className="back-button" onClick={onBack}>{t('backToMain')}</button>
+        <div className="date-time">{formatDateTime(currentTime)}</div>
       </div>
 
       <div className="ticket-selection-content">

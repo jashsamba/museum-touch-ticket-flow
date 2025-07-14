@@ -15,6 +15,31 @@ const CheckoutScreen: React.FC<CheckoutScreenProps> = ({ onComplete, onBack, tot
   const [processing, setProcessing] = useState(false);
   const [emailSent, setEmailSent] = useState(false);
   const [emailSending, setEmailSending] = useState(false);
+  const [currentTime, setCurrentTime] = useState(new Date());
+
+  // Update time every second
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  // Format time as "11:00AM | September 23, 2025"
+  const formatDateTime = (date: Date) => {
+    const timeString = date.toLocaleTimeString('en-US', { 
+      hour: 'numeric', 
+      minute: '2-digit',
+      hour12: true 
+    });
+    const dateString = date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+    return `${timeString} | ${dateString}`;
+  };
 
   // Define ticket and add-on items (same as TicketSelectionScreen)
   const tickets = [
@@ -123,15 +148,15 @@ const CheckoutScreen: React.FC<CheckoutScreenProps> = ({ onComplete, onBack, tot
   return (
     <div className="screen-container">
       <div className="museum-header">
-        <button className="back-button" onClick={onBack}>← Details</button>
-        <div className="date-time">11:00AM | September 23, 2025</div>
+        <button className="back-button" onClick={onBack}>{t('backToDetails')}</button>
+        <div className="date-time">{formatDateTime(currentTime)}</div>
       </div>
 
       <div className="checkout-content">
         <div className="main-content">
           <div className="payment-terminal">
             <div className="payment-amount">
-              <span className="payment-label">Card payment:</span>
+              <span className="payment-label">{t('cardPayment')}</span>
               <span className="payment-total">${totals.total}</span>
             </div>
             
@@ -163,7 +188,7 @@ const CheckoutScreen: React.FC<CheckoutScreenProps> = ({ onComplete, onBack, tot
               {processing ? (
                 <div className="processing-message">
                   <div className="spinner"></div>
-                  <p>Processing payment...</p>
+                  <p>{t('processingPayment')}</p>
                   {userEmail && (
                     <button 
                       className={`send-receipt-button ${emailSent ? 'sent' : ''} ${emailSending ? 'sending' : ''}`}
@@ -173,23 +198,23 @@ const CheckoutScreen: React.FC<CheckoutScreenProps> = ({ onComplete, onBack, tot
                       {emailSending ? (
                         <>
                           <div className="mini-spinner"></div>
-                          Sending...
+                          {t('sending')}
                         </>
                       ) : emailSent ? (
-                        <>✓ Email Sent</>
+                        <>{t('emailSent')}</>
                       ) : (
-                        'Send Receipt'
+                        t('sendReceipt')
                       )}
                     </button>
                   )}
                 </div>
               ) : (
-                <p>Please follow instructions<br/>on the PIN pad terminal</p>
+                <p>{t('pinPadInstructions')}</p>
               )}
             </div>
           </div>
 
-          <button className="start-over-button">START OVER</button>
+          <button className="start-over-button">{t('startOver')}</button>
         </div>
 
         <div className="cart-sidebar">

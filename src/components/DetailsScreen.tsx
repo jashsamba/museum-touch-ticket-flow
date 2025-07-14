@@ -243,23 +243,23 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
   return (
     <div className="screen-container">
       <div className="museum-header">
-        <button className="back-button" onClick={onBack}>← Checkout</button>
+        <button className="back-button" onClick={onBack}>{t('backToCheckout')}</button>
         <div className="date-time">{formatDateTime(currentTime)}</div>
       </div>
 
       <div className="details-content">
         <div className="main-content">
           <div className="details-header">
-            <h2>Your Details</h2>
-            <p>Please enter your details before checking out.</p>
+            <h2>{t('yourDetailsTitle')}</h2>
+            <p>{t('yourDetailsSubtitle')}</p>
           </div>
 
           <div className="details-form">
             <div className="form-field">
-              <label>Email address*</label>
+              <label>{t('emailAddress')}</label>
               <input
                 type="email"
-                placeholder="Enter your email address"
+                placeholder={t('emailPlaceholder')}
                 value={details.email}
                 onFocus={() => handleFieldFocus('email')}
                 readOnly
@@ -270,10 +270,10 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
             </div>
 
             <div className="form-field">
-              <label>Postal code* (A1A 1A1 format)</label>
+              <label>{t('postalCodeLabel')}</label>
               <input
                 type="text"
-                placeholder="A1A 1A1"
+                placeholder={t('postalCodePlaceholder')}
                 value={details.postalCode}
                 onFocus={() => handleFieldFocus('postalCode')}
                 className={`${formatError ? 'format-error flicker' : ''}`}
@@ -289,7 +289,7 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
               disabled={!isValidForm()}
               onClick={handleContinue}
             >
-              Continue
+              {t('continueButton')}
             </button>
           </div>
 
@@ -298,7 +298,7 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
               <div className="virtual-keyboard">
                 <div className="keyboard-header">
                   <span>
-                    {activeField === 'email' ? 'Enter your email address' : 'Enter your postal code (A1A 1A1 format)'}
+                    {activeField === 'email' ? t('enterEmailAddress') : t('enterPostalCode')}
                   </span>
                   <button
                     className="keyboard-close"
@@ -313,12 +313,12 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
                 
                 <div className={`typing-display ${formatError ? 'typing-error' : ''}`}>
                   <div className="typing-label">
-                    {activeField === 'email' ? 'Email address:' : 'Postal code (A1A 1A1):'}
+                    {activeField === 'email' ? t('emailAddress') : t('postalCodeLabel')}
                   </div>
                   <div className="typing-input">
                     {activeField === 'email' 
-                      ? (details.email || "Start typing...")
-                      : (details.postalCode || "A1A 1A1")
+                      ? (details.email || t('startTyping'))
+                      : (details.postalCode || t('postalCodePlaceholder'))
                     }
                     <span className="typing-cursor">|</span>
                   </div>

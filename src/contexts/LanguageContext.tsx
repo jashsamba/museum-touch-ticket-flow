@@ -67,8 +67,18 @@ const translations = {
     serviceFee: 'Service fee',
     totalIncTax: 'Total (inc. tax)',
     
+    // Navigation
+    backToMain: '← Main Screen',
+    backToCheckout: '← Checkout',
+    backToDetails: '← Details',
+    
     // Details Screen
     yourDetailsTitle: 'Your Details',
+    yourDetailsSubtitle: 'Please enter your details before checking out.',
+    emailAddress: 'Email address*',
+    emailPlaceholder: 'Enter your email address',
+    postalCodeLabel: 'Postal code* (A1A 1A1 format)',
+    postalCodePlaceholder: 'A1A 1A1',
     firstName: 'First Name',
     lastName: 'Last Name',
     email: 'Email Address',
@@ -78,9 +88,19 @@ const translations = {
     continueButton: 'Continue',
     
     // Checkout Screen
+    cardPayment: 'Card payment:',
+    pinPadInstructions: 'Please follow instructions\non the PIN pad terminal',
     processingPayment: 'Processing payment...',
+    sendReceipt: 'Send Receipt',
+    sending: 'Sending...',
+    emailSent: '✓ Email Sent',
     cardReader: 'Card Reader',
-    startOver: 'Start Over',
+    startOver: 'START OVER',
+    
+    // Keyboard
+    enterEmailAddress: 'Enter your email address',
+    enterPostalCode: 'Enter your postal code (A1A 1A1 format)',
+    startTyping: 'Start typing...',
     
     // Completion Screen
     completionMessage: 'Please take the receipt to\nGuest Services and enjoy\nyour visit to THEMUSEUM.',
@@ -140,8 +160,18 @@ const translations = {
     serviceFee: 'Frais de service',
     totalIncTax: 'Total (taxes incl.)',
     
+    // Navigation
+    backToMain: '← Écran Principal',
+    backToCheckout: '← Commande',
+    backToDetails: '← Détails',
+    
     // Details Screen
     yourDetailsTitle: 'Vos Détails',
+    yourDetailsSubtitle: 'Veuillez entrer vos détails avant de commander.',
+    emailAddress: 'Adresse courriel*',
+    emailPlaceholder: 'Entrez votre adresse courriel',
+    postalCodeLabel: 'Code postal* (format A1A 1A1)',
+    postalCodePlaceholder: 'A1A 1A1',
     firstName: 'Prénom',
     lastName: 'Nom de famille',
     email: 'Adresse courriel',
@@ -151,9 +181,19 @@ const translations = {
     continueButton: 'Continuer',
     
     // Checkout Screen
+    cardPayment: 'Paiement par carte:',
+    pinPadInstructions: 'Veuillez suivre les instructions\nsur le terminal de NIP',
     processingPayment: 'Traitement du paiement...',
+    sendReceipt: 'Envoyer Reçu',
+    sending: 'Envoi...',
+    emailSent: '✓ Courriel Envoyé',
     cardReader: 'Lecteur de Carte',
-    startOver: 'Recommencer',
+    startOver: 'RECOMMENCER',
+    
+    // Keyboard
+    enterEmailAddress: 'Entrez votre adresse courriel',
+    enterPostalCode: 'Entrez votre code postal (format A1A 1A1)',
+    startTyping: 'Commencez à taper...',
     
     // Completion Screen
     completionMessage: 'Veuillez apporter le reçu au\nService à la clientèle et profitez\nde votre visite au THEMUSEUM.',
