@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
 
 interface DetailsScreenProps {
@@ -19,6 +19,31 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
   const [showKeyboard, setShowKeyboard] = useState(false);
   const [activeField, setActiveField] = useState<string | null>(null);
   const [formatError, setFormatError] = useState(false);
+  const [currentTime, setCurrentTime] = useState(new Date());
+
+  // Update time every second
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  // Format time as "11:00AM | September 23, 2025"
+  const formatDateTime = (date: Date) => {
+    const timeString = date.toLocaleTimeString('en-US', { 
+      hour: 'numeric', 
+      minute: '2-digit',
+      hour12: true 
+    });
+    const dateString = date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+    return `${timeString} | ${dateString}`;
+  };
 
   const emailKeyboardLayout = [
     ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'],
@@ -219,7 +244,7 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
     <div className="screen-container">
       <div className="museum-header">
         <button className="back-button" onClick={onBack}>← Checkout</button>
-        <div className="date-time">11:00AM | September 23, 2025</div>
+        <div className="date-time">{formatDateTime(currentTime)}</div>
       </div>
 
       <div className="details-content">
