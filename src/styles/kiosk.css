@@ -1100,6 +1100,23 @@
   border-color: #E53E3E;
 }
 
+.format-error {
+  animation: format-error-flicker 0.3s ease-in-out;
+  border-color: #dc3545 !important;
+  background-color: #ffe6e6 !important;
+}
+
+@keyframes format-error-flicker {
+  0%, 100% {
+    background-color: #fff;
+    border-color: #ddd;
+  }
+  50% {
+    background-color: #ffe6e6;
+    border-color: #dc3545;
+  }
+}
+
 /* ===============================
    CHECKOUT SCREEN
    =============================== */

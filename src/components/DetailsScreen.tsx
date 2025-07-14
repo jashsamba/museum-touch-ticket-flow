@@ -18,6 +18,7 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
 
   const [showKeyboard, setShowKeyboard] = useState(false);
   const [activeField, setActiveField] = useState<string | null>(null);
+  const [formatError, setFormatError] = useState(false);
 
   const emailKeyboardLayout = [
     ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'],
@@ -92,10 +93,40 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
     }
   };
 
+  // Validate postal code format in real-time
+  const validatePostalCodeFormat = (value: string) => {
+    // Canadian postal code pattern: Letter-Number-Letter Number-Letter-Number
+    const expectedPattern = ['letter', 'number', 'letter', 'space', 'number', 'letter', 'number'];
+    
+    for (let i = 0; i < value.length && i < expectedPattern.length; i++) {
+      const char = value[i];
+      const expected = expectedPattern[i];
+      
+      if (expected === 'letter' && !/[A-Z]/i.test(char)) {
+        return false;
+      }
+      if (expected === 'number' && !/\d/.test(char)) {
+        return false;
+      }
+      if (expected === 'space' && char !== ' ') {
+        return false;
+      }
+    }
+    return true;
+  };
+
   // Format Canadian postal code (A1A 1A1)
   const formatCanadianPostalCode = (value: string) => {
     // Remove all spaces and make uppercase
     const cleaned = value.replace(/\s/g, '').toUpperCase();
+    
+    // Validate format as user types
+    const isValidFormat = validatePostalCodeFormat(value.toUpperCase());
+    
+    if (!isValidFormat && value.length > 0) {
+      setFormatError(true);
+      setTimeout(() => setFormatError(false), 300); // Clear error after 300ms
+    }
     
     // Limit to 6 characters (3 letters + 3 numbers)
     const limited = cleaned.slice(0, 6);
@@ -215,6 +246,7 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
                 placeholder="A1A 1A1"
                 value={details.postalCode}
                 onFocus={() => handleFieldFocus('postalCode')}
+                className={`${formatError ? 'format-error' : ''}`}
                 readOnly
               />
               {details.postalCode && /^[A-Z]\d[A-Z] \d[A-Z]\d$/.test(details.postalCode) && (
