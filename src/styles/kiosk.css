@@ -941,12 +941,49 @@
   cursor: not-allowed;
 }
 
+.keyboard-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
 .virtual-keyboard {
-  margin-top: 50px;
   background: #f8f9fa;
   padding: 30px;
   border-radius: 12px;
   border: 1px solid #e9ecef;
+  max-width: 800px;
+  width: 90%;
+}
+
+.keyboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.keyboard-close {
+  background: #E53E3E;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .keyboard-row {
@@ -976,8 +1013,29 @@
   border-color: #E53E3E;
 }
 
-.space-key {
-  min-width: 300px;
+.email-domain-key {
+  min-width: 140px;
+  font-size: 14px;
+  background: #E53E3E;
+  color: white;
+  border-color: #E53E3E;
+}
+
+.email-domain-key:hover {
+  background: #C53030;
+  border-color: #C53030;
+}
+
+.enter-key {
+  min-width: 150px;
+  background: #28a745;
+  color: white;
+  border-color: #28a745;
+}
+
+.enter-key:hover {
+  background: #218838;
+  border-color: #218838;
 }
 
 /* ===============================

@@ -12,14 +12,7 @@ interface DetailsScreenProps {
 const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, totals, quantities, addOns }) => {
   const { t } = useLanguage();
   const [details, setDetails] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    contactNumber: '',
-    postalCode: '',
-    discountCode: '',
-    emailOffers: true,
-    acceptTerms: true
+    email: ''
   });
 
   const [showKeyboard, setShowKeyboard] = useState(false);
@@ -30,7 +23,7 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
     ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
     ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
     ['⇧', 'z', 'x', 'c', 'v', 'b', 'n', 'm', '-', '⇧'],
-    ['123', '@', '_', 'space', '.', '←']
+    ['@gmail.com', '@outlook.com', '@yahoo.com', '@hotmail.com', '.', '←']
   ];
 
   const handleFieldFocus = (fieldName: string) => {
@@ -47,15 +40,19 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
           [activeField]: String(prev[activeField as keyof typeof prev]).slice(0, -1)
         }));
       }
-    } else if (key === 'space') {
-      // Space
+    } else if (key === 'Enter') {
+      // Close keyboard on Enter
+      setShowKeyboard(false);
+      setActiveField(null);
+    } else if (key.startsWith('@')) {
+      // Email domain shortcut
       if (activeField) {
         setDetails(prev => ({
           ...prev,
-          [activeField]: String(prev[activeField as keyof typeof prev]) + ' '
+          [activeField]: String(prev[activeField as keyof typeof prev]) + key
         }));
       }
-    } else if (key !== '⇧' && key !== '123') {
+    } else if (key !== '⇧') {
       // Regular character
       if (activeField) {
         setDetails(prev => ({
@@ -70,7 +67,7 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
     onContinue(details);
   };
 
-  const isValid = details.firstName && details.lastName && details.email && details.contactNumber && details.postalCode && details.acceptTerms;
+  const isValid = details.email.includes('@') && details.email.includes('.');
 
   // Define ticket and add-on items (same as TicketSelectionScreen)
   const tickets = [
@@ -143,95 +140,18 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
           </div>
 
           <div className="details-form">
-            <div className="form-row">
-              <div className="form-field">
-                <label>First name*</label>
-                <input
-                  type="text"
-                  placeholder="Placeholder"
-                  value={details.firstName}
-                  onFocus={() => handleFieldFocus('firstName')}
-                  readOnly
-                />
-              </div>
-              <div className="form-field">
-                <label>Last name*</label>
-                <input
-                  type="text"
-                  placeholder="Placeholder"
-                  value={details.lastName}
-                  onFocus={() => handleFieldFocus('lastName')}
-                  readOnly
-                />
-              </div>
-            </div>
-
             <div className="form-field">
               <label>Email address*</label>
               <input
                 type="email"
-                placeholder="placeholder@placeholder.ca"
+                placeholder="Enter your email address"
                 value={details.email}
                 onFocus={() => handleFieldFocus('email')}
                 readOnly
               />
-              {details.email && <span className="validation-check">✓</span>}
-            </div>
-
-            <div className="form-row">
-              <div className="form-field">
-                <label>Contact number*</label>
-                <input
-                  type="tel"
-                  placeholder="+1 () 123456789"
-                  value={details.contactNumber}
-                  onFocus={() => handleFieldFocus('contactNumber')}
-                  readOnly
-                />
-              </div>
-              <div className="form-field">
-                <label>Postal code*</label>
-                <input
-                  type="text"
-                  placeholder="A1B 2C3"
-                  value={details.postalCode}
-                  onFocus={() => handleFieldFocus('postalCode')}
-                  readOnly
-                />
-              </div>
-            </div>
-
-            <div className="discount-section">
-              <h3>Apply a Discount</h3>
-              <p>Add a Discount code, gift card or membership below.</p>
-              <div className="form-field">
-                <input
-                  type="text"
-                  placeholder="Redeem now"
-                  value={details.discountCode}
-                  onFocus={() => handleFieldFocus('discountCode')}
-                  readOnly
-                />
-              </div>
-            </div>
-
-            <div className="checkbox-section">
-              <label className="checkbox-label">
-                <input
-                  type="checkbox"
-                  checked={details.emailOffers}
-                  onChange={(e) => setDetails(prev => ({ ...prev, emailOffers: e.target.checked }))}
-                />
-                Email me with news and offers.
-              </label>
-              <label className="checkbox-label">
-                <input
-                  type="checkbox"
-                  checked={details.acceptTerms}
-                  onChange={(e) => setDetails(prev => ({ ...prev, acceptTerms: e.target.checked }))}
-                />
-                I have read and accepted the terms and conditions.
-              </label>
+              {details.email && details.email.includes('@') && details.email.includes('.') && (
+                <span className="validation-check">✓</span>
+              )}
             </div>
 
             <button 
@@ -244,20 +164,42 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
           </div>
 
           {showKeyboard && (
-            <div className="virtual-keyboard">
-              {keyboardLayout.map((row, rowIndex) => (
-                <div key={rowIndex} className="keyboard-row">
-                  {row.map((key, keyIndex) => (
-                    <button
-                      key={keyIndex}
-                      className={`keyboard-key ${key === 'space' ? 'space-key' : ''}`}
-                      onClick={() => handleKeyPress(key)}
-                    >
-                      {key === 'space' ? '' : key}
-                    </button>
-                  ))}
+            <div className="keyboard-overlay">
+              <div className="virtual-keyboard">
+                <div className="keyboard-header">
+                  <span>Enter your email address</span>
+                  <button 
+                    className="keyboard-close"
+                    onClick={() => {
+                      setShowKeyboard(false);
+                      setActiveField(null);
+                    }}
+                  >
+                    ✕
+                  </button>
                 </div>
-              ))}
+                {keyboardLayout.map((row, rowIndex) => (
+                  <div key={rowIndex} className="keyboard-row">
+                    {row.map((key, keyIndex) => (
+                      <button
+                        key={keyIndex}
+                        className={`keyboard-key ${key.startsWith('@') ? 'email-domain-key' : ''}`}
+                        onClick={() => handleKeyPress(key)}
+                      >
+                        {key}
+                      </button>
+                    ))}
+                  </div>
+                ))}
+                <div className="keyboard-row">
+                  <button
+                    className="keyboard-key enter-key"
+                    onClick={() => handleKeyPress('Enter')}
+                  >
+                    Enter
+                  </button>
+                </div>
+              </div>
             </div>
           )}
         </div>
