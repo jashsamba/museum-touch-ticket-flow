@@ -82,9 +82,6 @@ const CompletionScreen: React.FC<CompletionScreenProps> = ({ onStartOver, orderD
         <div className="museum-logo">
           <span className="museum-title">THEMUSEUM</span>
         </div>
-        <div className="language-selector">
-          🇬🇧 EN ▼
-        </div>
         <div className="museum-text">MUSEUM</div>
       </div>
       
