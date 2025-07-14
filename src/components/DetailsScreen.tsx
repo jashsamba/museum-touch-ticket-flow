@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 
 interface DetailsScreenProps {
   onContinue: (details: any) => void;
+  onBack: () => void;
   totals: any;
 }
 
-const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, totals }) => {
+const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, totals }) => {
   const [details, setDetails] = useState({
     firstName: '',
     lastName: '',
@@ -70,7 +71,7 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, totals }) => 
   return (
     <div className="screen-container">
       <div className="museum-header">
-        <button className="back-button">← Your Details</button>
+        <button className="back-button" onClick={onBack}>← Your Details</button>
         <div className="date-time">11:00AM | September 23, 2025</div>
       </div>
 

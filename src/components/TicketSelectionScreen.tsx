@@ -16,9 +16,10 @@ interface AddOnItem {
 
 interface TicketSelectionScreenProps {
   onContinue: (selections: any) => void;
+  onBack: () => void;
 }
 
-const TicketSelectionScreen: React.FC<TicketSelectionScreenProps> = ({ onContinue }) => {
+const TicketSelectionScreen: React.FC<TicketSelectionScreenProps> = ({ onContinue, onBack }) => {
   const [quantities, setQuantities] = useState<{[key: string]: number}>({});
   const [addOns, setAddOns] = useState<{[key: string]: number}>({});
 
@@ -86,7 +87,7 @@ const TicketSelectionScreen: React.FC<TicketSelectionScreenProps> = ({ onContinu
   return (
     <div className="screen-container">
       <div className="museum-header">
-        <button className="back-button">← Checkout</button>
+        <button className="back-button" onClick={onBack}>← Checkout</button>
         <div className="date-time">11:00AM | September 23, 2025</div>
       </div>
 

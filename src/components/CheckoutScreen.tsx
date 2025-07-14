@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 
 interface CheckoutScreenProps {
   onComplete: () => void;
+  onBack: () => void;
   totals: any;
 }
 
-const CheckoutScreen: React.FC<CheckoutScreenProps> = ({ onComplete, totals }) => {
+const CheckoutScreen: React.FC<CheckoutScreenProps> = ({ onComplete, onBack, totals }) => {
   const [processing, setProcessing] = useState(false);
 
   useEffect(() => {
@@ -24,7 +25,7 @@ const CheckoutScreen: React.FC<CheckoutScreenProps> = ({ onComplete, totals }) =
   return (
     <div className="screen-container">
       <div className="museum-header">
-        <button className="back-button">← Checkout</button>
+        <button className="back-button" onClick={onBack}>← Checkout</button>
         <div className="date-time">11:00AM | September 23, 2025</div>
       </div>
 
