@@ -1,6 +1,6 @@
-
-/* Museum Kiosk Interface Styles */
-/* Optimized for 1080p touchscreen displays and mobile devices */
+/* ===============================
+   GENERAL STYLES
+   =============================== */
 
 * {
   box-sizing: border-box;
@@ -12,7 +12,7 @@
   height: 100vh;
   overflow: hidden;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+  background: linear-gradient(135deg, #E53E3E 0%, #C53030 100%);
 }
 
 .kiosk-container {
@@ -21,21 +21,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1rem;
+  padding: 0;
 }
 
 .screen-container {
-  width: 100%;
-  max-width: 800px;
-  height: 100%;
-  max-height: 650px;
+  width: 100vw;
+  height: 100vh;
   background: white;
-  border-radius: 16px;
-  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
-  padding: 2rem;
-  animation: fadeIn 0.5s ease-out;
+  overflow: hidden;
 }
 
 @keyframes fadeIn {
@@ -49,7 +44,6 @@
   }
 }
 
-/* Loading Screen */
 .loading-screen {
   display: flex;
   flex-direction: column;
@@ -63,7 +57,7 @@
   width: 40px;
   height: 40px;
   border: 4px solid #e2e8f0;
-  border-top: 4px solid #3b82f6;
+  border-top: 4px solid #E53E3E;
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -73,607 +67,851 @@
   100% { transform: rotate(360deg); }
 }
 
-/* Header Styles */
-.screen-header {
-  text-align: center;
-  margin-bottom: 2rem;
-}
+/* ===============================
+   MUSEUM HEADER
+   =============================== */
 
-.header-top {
+.museum-header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 1rem;
+  align-items: center;
+  padding: 20px 30px;
+  background: linear-gradient(135deg, #E53E3E, #C53030);
+  color: white;
+  position: relative;
+  min-height: 80px;
+}
+
+.museum-logo {
+  flex: 1;
 }
 
 .museum-title {
-  font-size: 2.2rem;
+  font-size: 32px;
   font-weight: 800;
-  color: #1e3a8a;
-  margin: 0;
-  letter-spacing: -0.02em;
-  flex: 1;
+  letter-spacing: 2px;
 }
 
-.user-info {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 0.5rem;
-}
-
-.user-details {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.9rem;
-  color: #64748b;
-}
-
-.sign-out-button {
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
-  background: #f1f5f9;
-  color: #475569;
-  border: 1px solid #e2e8f0;
-  border-radius: 6px;
-  padding: 0.3rem 0.6rem;
-  font-size: 0.8rem;
+.back-button {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
   cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
   transition: all 0.2s ease;
 }
 
-.sign-out-button:hover {
-  background: #e2e8f0;
+.back-button:hover {
+  background: rgba(255, 255, 255, 0.3);
 }
 
-.screen-title {
-  font-size: 1.8rem;
-  font-weight: 700;
-  color: #1e3a8a;
-  margin: 0 0 0.8rem 0;
+.date-time {
+  font-size: 16px;
+  opacity: 0.9;
+  font-weight: 500;
 }
 
-.screen-subtitle {
-  font-size: 1.1rem;
-  color: #64748b;
-  margin: 0;
-  font-weight: 400;
+.language-selector {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
 }
 
-/* Auth Screen Back Button */
-.auth-back-button {
+.museum-text {
   position: absolute;
-  top: 2rem;
-  left: 2rem;
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  padding: 0.5rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  color: #475569;
+  right: 30px;
+  bottom: 10px;
+  font-size: 12px;
+  opacity: 0.7;
+  letter-spacing: 1px;
 }
 
-.auth-back-button:hover {
-  background: #f1f5f9;
-  transform: translateX(-2px);
-}
+/* ===============================
+   LANDING SCREEN
+   =============================== */
 
-/* Success Icon */
-.success-icon {
-  margin-bottom: 1.2rem;
-}
-
-/* Welcome Screen - Ticket Selection */
-.ticket-selection {
+.landing-content {
   display: flex;
-  gap: 1rem;
   justify-content: center;
-  flex: 1;
   align-items: center;
-  flex-wrap: wrap;
+  height: calc(100vh - 80px);
+  background: linear-gradient(135deg, #E53E3E, #C53030);
 }
 
-.ticket-button {
-  background: white;
-  border: 2px solid #e2e8f0;
-  border-radius: 12px;
-  padding: 1.2rem 1rem;
-  min-width: 180px;
-  min-height: 140px;
+.buy-tickets-button {
+  background: linear-gradient(135deg, #fff, #f8f8f8);
+  color: #E53E3E;
+  border: none;
+  border-radius: 16px;
+  padding: 80px 160px;
+  font-size: 56px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.6rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  gap: 20px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
 }
 
-.ticket-button:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
-  border-color: #3b82f6;
+.buy-tickets-button:hover {
+  transform: scale(1.05);
 }
 
-.ticket-button.selected {
-  border-color: #fbbf24;
-  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
-  box-shadow: 0 12px 24px rgba(251, 191, 36, 0.15);
+.payment-notice {
+  font-size: 28px;
+  font-weight: normal;
+  opacity: 0.8;
 }
 
-.ticket-icon {
-  color: #3b82f6;
+/* ===============================
+   TICKET SELECTION SCREEN
+   =============================== */
+
+.ticket-selection-content {
+  display: flex;
+  height: calc(100vh - 80px);
 }
 
-.ticket-button.selected .ticket-icon {
-  color: #f59e0b;
+.main-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 30px;
+  background: #f8f9fa;
 }
 
-.ticket-text {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #1e3a8a;
+.museum-logo-section {
   text-align: center;
+  margin-bottom: 30px;
 }
 
-.ticket-price {
-  font-size: 1rem;
-  font-weight: 700;
-  color: #059669;
-  background: #ecfdf5;
-  padding: 0.3rem 0.6rem;
-  border-radius: 6px;
-}
-
-/* Auth Form */
-.auth-form {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  justify-content: center;
-  max-width: 400px;
-  margin: 0 auto;
-  width: 100%;
-}
-
-.password-input-container {
-  position: relative;
-}
-
-.password-input {
-  padding-right: 3rem !important;
-}
-
-.password-toggle {
-  position: absolute;
-  right: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  color: #64748b;
-  cursor: pointer;
-  padding: 0.2rem;
-  border-radius: 4px;
-  transition: all 0.2s ease;
-}
-
-.password-toggle:hover {
-  color: #3b82f6;
-  background: #f8fafc;
-}
-
-.auth-submit-button {
-  padding: 1rem 2rem;
-  font-size: 1.1rem;
-  font-weight: 600;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  min-height: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 1rem;
-}
-
-.auth-submit-button.active {
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+.museum-logo-box {
+  display: inline-block;
+  background: #E53E3E;
   color: white;
-  box-shadow: 0 6px 16px rgba(59, 130, 246, 0.3);
-}
-
-.auth-submit-button.active:hover {
-  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
-}
-
-.auth-submit-button.disabled {
-  background: #e5e7eb;
-  color: #9ca3af;
-  cursor: not-allowed;
-}
-
-.auth-switch {
-  text-align: center;
-  margin-top: 1rem;
-}
-
-.auth-switch p {
-  color: #64748b;
-  margin: 0;
-}
-
-.auth-switch-button {
-  background: none;
-  border: none;
-  color: #3b82f6;
-  font-weight: 600;
-  cursor: pointer;
-  margin-left: 0.5rem;
-  text-decoration: underline;
-}
-
-.auth-switch-button:hover {
-  color: #2563eb;
-}
-
-/* Contact Form */
-.contact-form {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  justify-content: center;
-  max-width: 400px;
-  margin: 0 auto;
-  width: 100%;
-}
-
-.input-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.input-label {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 1rem;
-  font-weight: 600;
-  color: #374151;
-}
-
-.input-icon {
-  color: #3b82f6;
-}
-
-.kiosk-input {
-  padding: 1rem;
-  font-size: 1rem;
-  border: 2px solid #e5e7eb;
-  border-radius: 8px;
-  background: white;
-  transition: all 0.3s ease;
-  min-height: 50px;
-}
-
-.kiosk-input:focus {
-  outline: none;
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-}
-
-.kiosk-input::placeholder {
-  color: #9ca3af;
-}
-
-/* Footer Buttons */
-.screen-footer {
-  display: flex;
-  justify-content: center;
-  margin-top: 2rem;
-}
-
-.continue-button,
-.submit-button,
-.start-over-button {
-  padding: 1rem 2.5rem;
-  font-size: 1.1rem;
-  font-weight: 600;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  min-height: 50px;
-  min-width: 160px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-}
-
-.continue-button.active,
-.submit-button.active {
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-  color: white;
-  box-shadow: 0 6px 16px rgba(59, 130, 246, 0.3);
-}
-
-.continue-button.active:hover,
-.submit-button.active:hover {
-  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
-}
-
-.continue-button.disabled,
-.submit-button.disabled {
-  background: #e5e7eb;
-  color: #9ca3af;
-  cursor: not-allowed;
-}
-
-.start-over-button {
-  background: #f8fafc;
-  color: #475569;
-  border: 2px solid #e2e8f0;
-}
-
-.start-over-button:hover {
-  background: #f1f5f9;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-}
-
-/* Confirmation Screen */
-.confirmation-details {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  align-items: center;
-  justify-content: center;
-}
-
-.ticket-preview {
-  background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
-  color: white;
+  padding: 30px 60px;
   border-radius: 12px;
-  padding: 1.5rem;
-  max-width: 400px;
-  width: 100%;
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+  margin-bottom: 15px;
 }
 
-.ticket-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.2rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+.museum-logo-text {
+  font-size: 56px;
+  font-weight: bold;
 }
 
-.ticket-header h3 {
-  font-size: 1.2rem;
-  font-weight: 700;
-  margin: 0;
-}
-
-.qr-placeholder {
-  width: 50px;
-  height: 50px;
-  background: white;
-  border-radius: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.qr-code {
-  width: 35px;
-  height: 35px;
-  background: repeating-linear-gradient(
-    45deg,
-    #1e3a8a,
-    #1e3a8a 2px,
-    transparent 2px,
-    transparent 4px
-  );
-  border-radius: 3px;
+.museum-subtitle {
+  display: block;
+  font-size: 18px;
+  letter-spacing: 6px;
+  margin-top: 8px;
 }
 
 .ticket-info {
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
+  margin-bottom: 40px;
 }
 
-.info-row {
+.ticket-info h2 {
+  font-size: 28px;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.ticket-info p {
+  color: #666;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.ticket-section, .addons-section {
+  margin-bottom: 50px;
+}
+
+.ticket-section h3, .addons-section h3 {
+  font-size: 24px;
+  margin-bottom: 25px;
+  color: #333;
+  font-weight: 600;
+}
+
+.ticket-item, .addon-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
+  border-bottom: 1px solid #eee;
+  background: white;
+  margin-bottom: 10px;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.ticket-details, .addon-details {
+  flex: 1;
+}
+
+.ticket-name, .addon-name {
+  font-weight: 600;
+  margin-bottom: 5px;
+  font-size: 16px;
+  color: #333;
+}
+
+.ticket-price, .addon-price {
+  color: #666;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.ticket-actions {
+  color: #E53E3E;
+  font-size: 14px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.quantity-controls {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 0.9rem;
+  gap: 15px;
 }
 
-.info-label {
-  font-weight: 600;
-  min-width: 80px;
+.quantity-controls button {
+  width: 40px;
+  height: 40px;
+  border: 2px solid #ddd;
+  background: white;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: bold;
+  color: #666;
 }
 
-.info-value {
-  font-weight: 400;
+.quantity-controls button:hover {
+  background: #f5f5f5;
+  border-color: #E53E3E;
+  color: #E53E3E;
 }
 
-.confirmation-message {
+.quantity {
+  min-width: 30px;
   text-align: center;
-  color: #64748b;
-  font-size: 0.9rem;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.donation-header {
+  background: #f8f9fa;
+  padding: 25px;
+  border-radius: 12px;
+  margin-bottom: 25px;
+  border: 1px solid #e9ecef;
+}
+
+.donate-button {
+  background: #E53E3E;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 6px;
+  display: inline-block;
+  font-weight: bold;
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
+.donation-header p {
+  font-size: 14px;
+  line-height: 1.4;
+  margin-bottom: 10px;
+}
+
+.cart-total-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30px 0;
+  border-top: 2px solid #eee;
+  margin-top: 40px;
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.cart-total-text {
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 15px;
+}
+
+.continue-shopping {
+  background: white;
+  border: 2px solid #ddd;
+  padding: 15px 30px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.continue-shopping:hover {
+  border-color: #E53E3E;
+  color: #E53E3E;
+}
+
+.checkout-button {
+  background: #E53E3E;
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 16px;
+  transition: all 0.2s ease;
+}
+
+.checkout-button:hover {
+  background: #C53030;
+}
+
+.checkout-button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+/* ===============================
+   CART SIDEBAR
+   =============================== */
+
+.cart-sidebar {
+  width: 350px;
+  background: white;
+  border-left: 1px solid #eee;
+  padding: 30px;
+  overflow-y: auto;
+}
+
+.cart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #eee;
+}
+
+.cart-label {
+  font-weight: bold;
+  font-size: 18px;
+  color: #333;
+}
+
+.item-count {
+  font-size: 12px;
+  background: #E53E3E;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-weight: 600;
+}
+
+.cart-items {
+  margin-bottom: 25px;
+}
+
+.cart-item {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.item-icon {
+  font-size: 24px;
+}
+
+.item-details {
+  flex: 1;
+  font-size: 14px;
+}
+
+.item-details div:first-child {
+  font-weight: bold;
+  margin-bottom: 3px;
+  color: #333;
+}
+
+.item-details div:nth-child(2) {
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.edit-button {
+  color: #E53E3E;
+  background: none;
+  border: none;
+  font-size: 12px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.edit-button:hover {
+  text-decoration: underline;
+}
+
+.item-price {
+  font-weight: bold;
+  color: #333;
+}
+
+.cart-summary {
+  margin-bottom: 25px;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.summary-line {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.summary-line.total {
+  font-weight: bold;
+  font-size: 16px;
+  padding-top: 10px;
+  border-top: 2px solid #ddd;
+  margin-top: 10px;
+}
+
+.checkout-button-sidebar {
+  width: 100%;
+  background: #E53E3E;
+  color: white;
+  border: none;
+  padding: 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 16px;
+  transition: all 0.2s ease;
+}
+
+.checkout-button-sidebar:hover {
+  background: #C53030;
+}
+
+.checkout-button-sidebar:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+/* ===============================
+   DETAILS SCREEN
+   =============================== */
+
+.details-content {
+  display: flex;
+  height: calc(100vh - 80px);
+}
+
+.details-header h2 {
+  font-size: 28px;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.details-header p {
+  color: #666;
+  margin-bottom: 40px;
+  font-size: 16px;
+}
+
+.details-form {
+  max-width: 600px;
+}
+
+.form-row {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 25px;
+}
+
+.form-field {
+  flex: 1;
+  margin-bottom: 25px;
+  position: relative;
+}
+
+.form-field label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #333;
+  font-size: 14px;
+}
+
+.form-field input {
+  width: 100%;
+  padding: 15px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  background: white;
+  transition: all 0.2s ease;
+}
+
+.form-field input:focus {
+  outline: none;
+  border-color: #E53E3E;
+}
+
+.validation-check {
+  position: absolute;
+  right: 15px;
+  top: 45px;
+  color: green;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.discount-section {
+  margin: 40px 0;
+  padding: 25px;
+  background: #f8f9fa;
+  border-radius: 12px;
+}
+
+.discount-section h3 {
+  font-size: 20px;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.discount-section p {
+  color: #666;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+.checkbox-section {
+  margin: 40px 0;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 20px;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.checkbox-label input {
+  width: auto;
+  margin-top: 2px;
+}
+
+.continue-button {
+  background: #E53E3E;
+  color: white;
+  border: none;
+  padding: 18px 40px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 16px;
+  margin-top: 30px;
+  transition: all 0.2s ease;
+}
+
+.continue-button:hover {
+  background: #C53030;
+}
+
+.continue-button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.virtual-keyboard {
+  margin-top: 50px;
+  background: #f8f9fa;
+  padding: 30px;
+  border-radius: 12px;
+  border: 1px solid #e9ecef;
+}
+
+.keyboard-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+  justify-content: center;
+}
+
+.keyboard-key {
+  min-width: 60px;
+  height: 60px;
+  background: white;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.keyboard-key:hover {
+  background: #e8e8e8;
+  border-color: #E53E3E;
+}
+
+.space-key {
+  min-width: 300px;
+}
+
+/* ===============================
+   CHECKOUT SCREEN
+   =============================== */
+
+.checkout-content {
+  display: flex;
+  height: calc(100vh - 80px);
+}
+
+.payment-terminal {
+  background: #e8e8e8;
+  padding: 80px;
+  border-radius: 16px;
+  text-align: center;
+  margin: 60px auto;
+  max-width: 600px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+}
+
+.payment-amount {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 50px;
+  font-size: 28px;
+  padding: 0 20px;
+}
+
+.payment-label {
+  color: #666;
+  font-weight: 500;
+}
+
+.payment-total {
+  font-weight: bold;
+  font-size: 36px;
+  color: #333;
+}
+
+.terminal-icon {
+  margin-bottom: 50px;
+}
+
+.card-reader {
+  width: 150px;
+  height: 250px;
+  background: #333;
+  margin: 0 auto;
+  border-radius: 12px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 25px 20px;
+}
+
+.card-slot {
+  width: 100px;
+  height: 10px;
+  background: #555;
+  margin: 0 auto 20px;
+  border-radius: 3px;
+}
+
+.screen {
+  width: 90px;
+  height: 50px;
+  background: #222;
+  margin: 0 auto 25px;
+  border-radius: 6px;
+}
+
+.keypad {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.keypad-row {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.key {
+  width: 22px;
+  height: 22px;
+  background: #666;
+  border-radius: 50%;
+}
+
+.payment-instructions {
+  font-size: 20px;
+  color: #666;
   line-height: 1.5;
-  max-width: 400px;
 }
 
-.confirmation-message p {
-  margin: 0 0 0.6rem 0;
+.processing-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
 }
 
-.confirmation-message p:last-child {
-  margin-bottom: 0;
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #e8e8e8;
+  border-top: 4px solid #E53E3E;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
 }
 
-/* Mobile Responsive Design */
+.start-over-button {
+  background: #f8f9fa;
+  color: #666;
+  border: 2px solid #ddd;
+  padding: 15px 30px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  margin-top: 40px;
+  transition: all 0.2s ease;
+}
+
+.start-over-button:hover {
+  background: #e9ecef;
+  border-color: #bbb;
+}
+
+/* ===============================
+   COMPLETION SCREEN
+   =============================== */
+
+.completion-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 80px);
+  text-align: center;
+  background: linear-gradient(135deg, #E53E3E, #C53030);
+}
+
+.completion-message {
+  background: #e8e8e8;
+  padding: 80px 60px;
+  border-radius: 16px;
+  max-width: 600px;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.2);
+}
+
+.completion-message p {
+  font-size: 20px;
+  line-height: 1.6;
+  color: #666;
+  margin-bottom: 40px;
+}
+
+.email-backup {
+  font-size: 18px !important;
+  color: #999 !important;
+}
+
+/* ===============================
+   RESPONSIVE DESIGN
+   =============================== */
+
+@media (max-width: 1024px) {
+  .ticket-selection-content,
+  .details-content,
+  .checkout-content {
+    flex-direction: column;
+  }
+  
+  .cart-sidebar {
+    width: 100%;
+    border-left: none;
+    border-top: 1px solid #eee;
+  }
+  
+  .main-content {
+    padding: 20px;
+  }
+  
+  .museum-header {
+    padding: 15px 20px;
+  }
+  
+  .buy-tickets-button {
+    padding: 60px 120px;
+    font-size: 48px;
+  }
+}
+
 @media (max-width: 768px) {
-  .kiosk-container {
-    padding: 0.5rem;
-  }
-  
-  .screen-container {
-    padding: 1.5rem;
-    border-radius: 12px;
-    max-height: none;
-    height: auto;
-    min-height: 100vh;
-  }
-
-  .header-top {
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-  }
-  
   .museum-title {
-    font-size: 1.8rem;
-    text-align: center;
+    font-size: 24px;
   }
   
-  .screen-title {
-    font-size: 1.5rem;
-  }
-
-  .screen-subtitle {
-    font-size: 1rem;
+  .buy-tickets-button {
+    padding: 40px 80px;
+    font-size: 36px;
   }
   
-  .ticket-selection {
+  .payment-notice {
+    font-size: 20px;
+  }
+  
+  .form-row {
     flex-direction: column;
-    align-items: stretch;
-    gap: 1rem;
   }
   
-  .ticket-button {
-    min-width: 100%;
-    min-height: 100px;
-    padding: 1rem;
-    flex-direction: row;
-    justify-content: flex-start;
-    gap: 1rem;
-  }
-
-  .ticket-icon {
-    flex-shrink: 0;
-  }
-
-  .ticket-text {
-    font-size: 1.1rem;
-    flex: 1;
-    text-align: left;
-  }
-
-  .auth-form,
-  .contact-form {
-    gap: 1.2rem;
-  }
-
-  .auth-back-button {
-    top: 1rem;
-    left: 1rem;
-  }
-
-  .continue-button,
-  .submit-button,
-  .auth-submit-button {
-    width: 100%;
-    min-width: 100%;
-  }
-
-  .ticket-preview {
-    margin: 0;
-  }
-
-  .user-info {
-    width: 100%;
-    align-items: center;
-  }
-
-  .user-details {
-    font-size: 0.8rem;
-  }
-}
-
-/* Extra small screens */
-@media (max-width: 480px) {
-  .screen-container {
-    padding: 1rem;
-  }
-
-  .museum-title {
-    font-size: 1.6rem;
-  }
-
-  .screen-title {
-    font-size: 1.3rem;
-  }
-
-  .ticket-button {
-    min-height: 80px;
-    padding: 0.8rem;
-  }
-
-  .ticket-text {
-    font-size: 1rem;
-  }
-
-  .ticket-price {
-    font-size: 0.9rem;
-  }
-}
-
-/* Touch-specific optimizations */
-@media (pointer: coarse) {
-  .ticket-button,
-  .continue-button,
-  .submit-button,
-  .auth-submit-button,
-  .start-over-button {
-    min-height: 56px;
+  .keyboard-key {
+    min-width: 50px;
+    height: 50px;
+    font-size: 16px;
   }
   
-  .kiosk-input {
-    min-height: 56px;
-  }
-
-  .password-toggle {
-    padding: 0.5rem;
-  }
-}
-
-/* High DPI Display Optimizations */
-@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-  .ticket-button,
-  .kiosk-input,
-  .continue-button,
-  .submit-button,
-  .auth-submit-button,
-  .start-over-button {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+  .space-key {
+    min-width: 200px;
   }
 }

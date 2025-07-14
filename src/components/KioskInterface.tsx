@@ -2,29 +2,21 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { User } from '@supabase/supabase-js';
-import WelcomeScreen from './WelcomeScreen';
-import ContactInfoScreen from './ContactInfoScreen';
-import ConfirmationScreen from './ConfirmationScreen';
-import AuthScreen from './AuthScreen';
+import LandingScreen from './LandingScreen';
+import TicketSelectionScreen from './TicketSelectionScreen';
+import DetailsScreen from './DetailsScreen';
+import CheckoutScreen from './CheckoutScreen';
+import CompletionScreen from './CompletionScreen';
 
-export type TicketType = 'general' | 'student' | 'senior' | null;
-
-export interface ContactInfo {
-  email: string;
-  postalCode: string;
-}
-
-export interface BookingData {
-  ticketType: TicketType;
-  contactInfo: ContactInfo;
-  timestamp: Date;
+export interface FlowData {
+  selections?: any;
+  details?: any;
+  totals?: any;
 }
 
 const KioskInterface = () => {
-  const [currentScreen, setCurrentScreen] = useState<'welcome' | 'auth' | 'contact' | 'confirmation'>('welcome');
-  const [selectedTicket, setSelectedTicket] = useState<TicketType>(null);
-  const [contactInfo, setContactInfo] = useState<ContactInfo>({ email: '', postalCode: '' });
-  const [bookingData, setBookingData] = useState<BookingData | null>(null);
+  const [currentScreen, setCurrentScreen] = useState<'landing' | 'tickets' | 'details' | 'checkout' | 'completion'>('landing');
+  const [flowData, setFlowData] = useState<FlowData>({});
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -38,56 +30,32 @@ const KioskInterface = () => {
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
-      if (session?.user && currentScreen === 'auth') {
-        setCurrentScreen('welcome');
-      }
     });
 
     return () => subscription.unsubscribe();
-  }, [currentScreen]);
+  }, []);
 
-  const handleTicketSelect = (ticketType: TicketType) => {
-    setSelectedTicket(ticketType);
+  const handleStartFlow = () => {
+    setCurrentScreen('tickets');
   };
 
-  const handleContinueToContact = () => {
-    if (selectedTicket) {
-      if (user) {
-        setCurrentScreen('contact');
-      } else {
-        setCurrentScreen('auth');
-      }
-    }
+  const handleTicketSelections = (selections: any) => {
+    setFlowData(prev => ({ ...prev, selections }));
+    setCurrentScreen('details');
   };
 
-  const handleContactSubmit = (info: ContactInfo) => {
-    setContactInfo(info);
-    const booking: BookingData = {
-      ticketType: selectedTicket,
-      contactInfo: info,
-      timestamp: new Date()
-    };
-    setBookingData(booking);
-    setCurrentScreen('confirmation');
+  const handleDetailsSubmit = (details: any) => {
+    setFlowData(prev => ({ ...prev, details }));
+    setCurrentScreen('checkout');
+  };
+
+  const handlePaymentComplete = () => {
+    setCurrentScreen('completion');
   };
 
   const handleStartOver = () => {
-    setCurrentScreen('welcome');
-    setSelectedTicket(null);
-    setContactInfo({ email: '', postalCode: '' });
-    setBookingData(null);
-  };
-
-  const handleAuthBack = () => {
-    setCurrentScreen('welcome');
-  };
-
-  const handleSignOut = async () => {
-    await supabase.auth.signOut();
-    setCurrentScreen('welcome');
-    setSelectedTicket(null);
-    setContactInfo({ email: '', postalCode: '' });
-    setBookingData(null);
+    setCurrentScreen('landing');
+    setFlowData({});
   };
 
   if (loading) {
@@ -105,34 +73,30 @@ const KioskInterface = () => {
 
   return (
     <div className="kiosk-container">
-      {currentScreen === 'welcome' && (
-        <WelcomeScreen 
-          selectedTicket={selectedTicket}
-          onTicketSelect={handleTicketSelect}
-          onContinue={handleContinueToContact}
-          user={user}
-          onSignOut={handleSignOut}
+      {currentScreen === 'landing' && (
+        <LandingScreen onStartFlow={handleStartFlow} />
+      )}
+      
+      {currentScreen === 'tickets' && (
+        <TicketSelectionScreen onContinue={handleTicketSelections} />
+      )}
+      
+      {currentScreen === 'details' && (
+        <DetailsScreen 
+          onContinue={handleDetailsSubmit}
+          totals={flowData.selections?.totals}
         />
       )}
       
-      {currentScreen === 'auth' && (
-        <AuthScreen 
-          onBack={handleAuthBack}
+      {currentScreen === 'checkout' && (
+        <CheckoutScreen 
+          onComplete={handlePaymentComplete}
+          totals={flowData.selections?.totals}
         />
       )}
       
-      {currentScreen === 'contact' && (
-        <ContactInfoScreen 
-          onSubmit={handleContactSubmit}
-          initialData={contactInfo}
-        />
-      )}
-      
-      {currentScreen === 'confirmation' && bookingData && (
-        <ConfirmationScreen 
-          bookingData={bookingData}
-          onStartOver={handleStartOver}
-        />
+      {currentScreen === 'completion' && (
+        <CompletionScreen onStartOver={handleStartOver} />
       )}
     </div>
   );
