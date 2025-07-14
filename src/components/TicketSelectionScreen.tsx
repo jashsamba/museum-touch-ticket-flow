@@ -79,6 +79,46 @@ const TicketSelectionScreen: React.FC<TicketSelectionScreenProps> = ({ onContinu
   const totals = calculateTotal();
   const hasSelections = Object.values(quantities).some(q => q > 0) || Object.values(addOns).some(q => q > 0);
 
+  // Generate dynamic cart items based on current selections
+  const generateCartItems = () => {
+    const cartItems = [];
+    
+    // Add selected tickets
+    tickets.forEach(ticket => {
+      const quantity = quantities[ticket.id] || 0;
+      if (quantity > 0) {
+        cartItems.push({
+          id: ticket.id,
+          icon: '🎫',
+          name: ticket.name,
+          description: `${ticket.name} (${quantity})`,
+          price: (quantity * ticket.price).toFixed(2),
+          quantity
+        });
+      }
+    });
+    
+    // Add selected add-ons
+    addOnItems.forEach(addOn => {
+      const quantity = addOns[addOn.id] || 0;
+      if (quantity > 0) {
+        cartItems.push({
+          id: addOn.id,
+          icon: '🎁',
+          name: addOn.name,
+          description: `${addOn.name} (${quantity})`,
+          price: (quantity * addOn.price).toFixed(2),
+          quantity
+        });
+      }
+    });
+    
+    return cartItems;
+  };
+
+  const cartItems = generateCartItems();
+  const totalItemCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+
   const handleContinue = () => {
     onContinue({
       tickets: quantities,
@@ -168,29 +208,33 @@ const TicketSelectionScreen: React.FC<TicketSelectionScreenProps> = ({ onContinu
         <div className="cart-sidebar">
           <div className="cart-header">
             <span className="cart-label">{t('yourCart')}</span>
-            <span className="item-count">1 {t('item')}</span>
+            <span className="item-count">
+              {totalItemCount === 0 ? t('noItems') : 
+               totalItemCount === 1 ? `1 ${t('item')}` : 
+               `${totalItemCount} ${t('items')}`}
+            </span>
           </div>
           
           <div className="cart-items">
-            <div className="cart-item">
-              <span className="item-icon">🎫</span>
-              <div className="item-details">
-                <div>THEMUSEUM General</div>
-                <div>Adult General Admission (1...)</div>
-                <button className="edit-button">{t('edit')}</button>
+            {cartItems.length === 0 ? (
+              <div className="empty-cart">
+                <span className="empty-cart-icon">🛒</span>
+                <div className="empty-cart-text">{t('cartEmpty')}</div>
+                <div className="empty-cart-subtext">{t('selectTicketsToStart')}</div>
               </div>
-              <div className="item-price">${totals.subtotal}</div>
-            </div>
-            
-            <div className="cart-item">
-              <span className="item-icon">🎁</span>
-              <div className="item-details">
-                <div>Donation Add-On</div>
-                <div>$5.00 Donation "Recommend...</div>
-                <button className="edit-button">{t('edit')}</button>
-              </div>
-              <div className="item-price">$5.00</div>
-            </div>
+            ) : (
+              cartItems.map(item => (
+                <div key={item.id} className="cart-item">
+                  <span className="item-icon">{item.icon}</span>
+                  <div className="item-details">
+                    <div>{item.name}</div>
+                    <div>{item.description}</div>
+                    <button className="edit-button">{t('edit')}</button>
+                  </div>
+                  <div className="item-price">${item.price}</div>
+                </div>
+              ))
+            )}
           </div>
 
           <div className="cart-summary">
