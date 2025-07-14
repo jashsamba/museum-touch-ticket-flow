@@ -15,6 +15,8 @@ export interface FlowData {
   selections?: any;
   details?: any;
   totals?: any;
+  tickets?: {[key: string]: number};
+  addOns?: {[key: string]: number};
 }
 
 const KioskInterface = () => {
@@ -24,6 +26,8 @@ const KioskInterface = () => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [isNavigatingBack, setIsNavigatingBack] = useState(false);
+  const [cartQuantities, setCartQuantities] = useState<{[key: string]: number}>({});
+  const [cartAddOns, setCartAddOns] = useState<{[key: string]: number}>({});
 
   const steps = [t('selectTickets'), t('yourDetails'), t('payment'), t('complete')];
   const getStepNumber = () => {
@@ -97,6 +101,22 @@ const KioskInterface = () => {
   const handleStartOver = () => {
     setCurrentScreen('landing');
     setFlowData({});
+    setCartQuantities({});
+    setCartAddOns({});
+  };
+
+  const updateCartQuantity = (id: string, change: number, isAddOn: boolean = false) => {
+    if (isAddOn) {
+      setCartAddOns(prev => ({
+        ...prev,
+        [id]: Math.max(0, (prev[id] || 0) + change)
+      }));
+    } else {
+      setCartQuantities(prev => ({
+        ...prev,
+        [id]: Math.max(0, (prev[id] || 0) + change)
+      }));
+    }
   };
 
   if (loading) {
@@ -136,6 +156,9 @@ const KioskInterface = () => {
           <TicketSelectionScreen 
             onContinue={handleTicketSelections}
             onBack={handleBackToLanding}
+            quantities={cartQuantities}
+            addOns={cartAddOns}
+            onUpdateQuantity={updateCartQuantity}
           />
         )}
         

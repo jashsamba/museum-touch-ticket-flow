@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import EnhancedQuantityControl from './EnhancedQuantityControl';
 import { useLanguage } from '../contexts/LanguageContext';
 
@@ -19,12 +19,19 @@ interface AddOnItem {
 interface TicketSelectionScreenProps {
   onContinue: (selections: any) => void;
   onBack: () => void;
+  quantities: {[key: string]: number};
+  addOns: {[key: string]: number};
+  onUpdateQuantity: (id: string, change: number, isAddOn?: boolean) => void;
 }
 
-const TicketSelectionScreen: React.FC<TicketSelectionScreenProps> = ({ onContinue, onBack }) => {
+const TicketSelectionScreen: React.FC<TicketSelectionScreenProps> = ({ 
+  onContinue, 
+  onBack, 
+  quantities, 
+  addOns, 
+  onUpdateQuantity 
+}) => {
   const { t } = useLanguage();
-  const [quantities, setQuantities] = useState<{[key: string]: number}>({});
-  const [addOns, setAddOns] = useState<{[key: string]: number}>({});
 
   const tickets: TicketItem[] = [
     { id: 'adult-general', name: t('adultGeneral'), price: 19.99, details: t('details') },
@@ -41,19 +48,6 @@ const TicketSelectionScreen: React.FC<TicketSelectionScreenProps> = ({ onContinu
     { id: 'bus-subsidy', name: t('busSubsidy'), price: 15.00 }
   ];
 
-  const updateQuantity = (id: string, change: number, isAddOn: boolean = false) => {
-    if (isAddOn) {
-      setAddOns(prev => ({
-        ...prev,
-        [id]: Math.max(0, (prev[id] || 0) + change)
-      }));
-    } else {
-      setQuantities(prev => ({
-        ...prev,
-        [id]: Math.max(0, (prev[id] || 0) + change)
-      }));
-    }
-  };
 
   const calculateTotal = () => {
     const ticketTotal = tickets.reduce((total, ticket) => {
@@ -157,7 +151,7 @@ const TicketSelectionScreen: React.FC<TicketSelectionScreenProps> = ({ onContinu
                 </div>
                 <EnhancedQuantityControl
                   quantity={quantities[ticket.id] || 0}
-                  onUpdate={(change) => updateQuantity(ticket.id, change)}
+                  onUpdate={(change) => onUpdateQuantity(ticket.id, change)}
                   className="ticket-quantity"
                 />
               </div>
@@ -181,7 +175,7 @@ const TicketSelectionScreen: React.FC<TicketSelectionScreenProps> = ({ onContinu
                 </div>
                 <EnhancedQuantityControl
                   quantity={addOns[addOn.id] || 0}
-                  onUpdate={(change) => updateQuantity(addOn.id, change, true)}
+                  onUpdate={(change) => onUpdateQuantity(addOn.id, change, true)}
                   className="addon-quantity"
                 />
               </div>
