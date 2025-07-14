@@ -22,6 +22,9 @@ const CheckoutScreen: React.FC<CheckoutScreenProps> = ({ onComplete, onBack, tot
   ];
 
   const addOnItems = [
+    { id: 'donation-5', name: t('donation5'), price: 5.00 },
+    { id: 'donation-10', name: t('donation10'), price: 10.00 },
+    { id: 'donation-25', name: t('donation25'), price: 25.00 },
     { id: 'field-trip', name: t('fieldTrip'), price: 17.00 },
     { id: 'bus-subsidy', name: t('busSubsidy'), price: 15.00 }
   ];
@@ -82,7 +85,7 @@ const CheckoutScreen: React.FC<CheckoutScreenProps> = ({ onComplete, onBack, tot
   return (
     <div className="screen-container">
       <div className="museum-header">
-        <button className="back-button" onClick={onBack}>← Checkout</button>
+        <button className="back-button" onClick={onBack}>← Details</button>
         <div className="date-time">11:00AM | September 23, 2025</div>
       </div>
 
