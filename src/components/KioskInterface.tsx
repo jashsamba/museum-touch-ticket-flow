@@ -183,7 +183,15 @@ const KioskInterface = () => {
         )}
         
         {currentScreen === 'completion' && (
-          <CompletionScreen onStartOver={handleStartOver} />
+          <CompletionScreen 
+            onStartOver={handleStartOver}
+            orderDetails={{
+              email: flowData.details?.email || '',
+              tickets: cartQuantities,
+              addOns: cartAddOns,
+              totals: flowData.selections?.totals || { subtotal: '0.00', tax: '0.00', total: '0.00' }
+            }}
+          />
         )}
       </div>
     </div>

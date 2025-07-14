@@ -1277,7 +1277,116 @@
 @keyframes buttonPulse {
   0%, 100% {
     transform: scale(1);
-  }
+}
+
+/* ===============================
+   N8N WEBHOOK CONTROLS
+   =============================== */
+
+.webhook-controls {
+  margin-top: 30px;
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.webhook-config-button,
+.webhook-trigger-button {
+  background: rgba(255, 255, 255, 0.9);
+  color: #E53E3E;
+  border: 2px solid #E53E3E;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.webhook-config-button:hover,
+.webhook-trigger-button:hover {
+  background: #E53E3E;
+  color: white;
+  transform: translateY(-2px);
+}
+
+.webhook-config {
+  background: white;
+  border: 2px solid #E53E3E;
+  border-radius: 12px;
+  padding: 25px;
+  margin-top: 20px;
+  max-width: 500px;
+  text-align: left;
+}
+
+.webhook-config h3 {
+  color: #E53E3E;
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+
+.webhook-config p {
+  color: #666;
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
+.webhook-input {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+
+.webhook-input:focus {
+  outline: none;
+  border-color: #E53E3E;
+}
+
+.webhook-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.save-button,
+.cancel-button {
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.save-button {
+  background: #E53E3E;
+  color: white;
+  border: none;
+}
+
+.save-button:hover {
+  background: #C53030;
+}
+
+.cancel-button {
+  background: #f5f5f5;
+  color: #666;
+  border: 1px solid #ddd;
+}
+
+.cancel-button:hover {
+  background: #e8e8e8;
+}
+
+/* ===============================
+   RESPONSIVE DESIGN
+   =============================== */
+
+@media (max-width: 1024px) {
   50% {
     transform: scale(1.05);
   }
