@@ -1003,7 +1003,7 @@
 
 .typing-cursor {
   animation: blink 1s infinite;
-  margin-left: 3px;
+  margin-left: 1px;
   color: #E53E3E;
   font-size: 24px;
   font-weight: bold;
