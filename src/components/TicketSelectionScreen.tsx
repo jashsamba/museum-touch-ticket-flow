@@ -122,7 +122,7 @@ const TicketSelectionScreen: React.FC<TicketSelectionScreenProps> = ({
   return (
     <div className="screen-container">
       <div className="museum-header">
-        <button className="back-button" onClick={onBack}>← {t('checkout')}</button>
+        <button className="back-button" onClick={onBack}>← Main Screen</button>
         <div className="date-time">11:00AM | September 23, 2025</div>
       </div>
 
