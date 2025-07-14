@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
+import { SERVICES_CONFIG, getN8nWebhookUrl } from '../config/services';
+import ConfigPanel from './ConfigPanel';
 
 interface CompletionScreenProps {
   onStartOver: () => void;
@@ -17,12 +19,13 @@ interface CompletionScreenProps {
 
 const CompletionScreen: React.FC<CompletionScreenProps> = ({ onStartOver, orderDetails }) => {
   const { t } = useLanguage();
-  const [webhookUrl, setWebhookUrl] = useState('https://jaswanthbunny007.app.n8n.cloud/webhook-test/dcb032ef-7d63-4ef5-8a8a-35ae03fb51ad');
+  const [webhookUrl, setWebhookUrl] = useState(getN8nWebhookUrl());
   const [showWebhookConfig, setShowWebhookConfig] = useState(false);
+  const [showConfigPanel, setShowConfigPanel] = useState(false);
 
   // Send order data to n8n webhook
   const sendToN8n = async (webhookUrl: string) => {
-    if (!orderDetails || !webhookUrl) return;
+    if (!orderDetails || !webhookUrl || !SERVICES_CONFIG.N8N.ENABLED) return;
 
     try {
       const response = await fetch(webhookUrl, {
@@ -38,7 +41,7 @@ const CompletionScreen: React.FC<CompletionScreenProps> = ({ onStartOver, orderD
           tickets: orderDetails.tickets,
           addOns: orderDetails.addOns,
           totals: orderDetails.totals,
-          museum: "THEMUSEUM",
+          museum: SERVICES_CONFIG.MUSEUM.NAME,
           triggered_from: window.location.origin,
         }),
       });
@@ -110,6 +113,13 @@ const CompletionScreen: React.FC<CompletionScreenProps> = ({ onStartOver, orderD
               ⚙️ Configure n8n Webhook
             </button>
             
+            <button 
+              className="webhook-config-button"
+              onClick={() => setShowConfigPanel(true)}
+            >
+              🔧 All Settings
+            </button>
+            
             {webhookUrl && (
               <button 
                 className="webhook-trigger-button"
@@ -126,7 +136,7 @@ const CompletionScreen: React.FC<CompletionScreenProps> = ({ onStartOver, orderD
               <p>Enter your n8n webhook URL to automatically send email receipts:</p>
               <input
                 type="url"
-                placeholder="https://jaswanthbunny007.app.n8n.cloud/webhook-test/dcb032ef-7d63-4ef5-8a8a-35ae03fb51ad"
+                placeholder={getN8nWebhookUrl()}
                 value={webhookUrl}
                 onChange={(e) => setWebhookUrl(e.target.value)}
                 className="webhook-input"
@@ -143,7 +153,7 @@ const CompletionScreen: React.FC<CompletionScreenProps> = ({ onStartOver, orderD
   tickets: orderDetails?.tickets || {"adult-general": 2},
   addOns: orderDetails?.addOns || {"donation-10": 1},
   totals: orderDetails?.totals || {subtotal: "49.97", tax: "6.50", total: "56.47"},
-  museum: "THEMUSEUM",
+  museum: SERVICES_CONFIG.MUSEUM.NAME,
   triggered_from: window.location.origin,
 }, null, 2)}
                   </pre>
@@ -161,6 +171,11 @@ const CompletionScreen: React.FC<CompletionScreenProps> = ({ onStartOver, orderD
           )}
         </div>
       </div>
+      
+      <ConfigPanel 
+        isOpen={showConfigPanel}
+        onClose={() => setShowConfigPanel(false)}
+      />
     </div>
   );
 };
