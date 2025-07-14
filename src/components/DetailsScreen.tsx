@@ -124,26 +124,24 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
 
   // Validate if character is allowed at specific position for postal code
   const isValidCharacterAtPosition = (char: string, position: number) => {
-    // Canadian postal code pattern: A1A 1A1 (positions 0,1,2,4,5,6 - position 3 is space)
-    // Position 0, 2, 5: Letters (A-Z)
-    // Position 1, 4, 6: Numbers (0-9)
+    // Canadian postal code pattern: A1A1A1 (no spaces)
+    // Position 0, 2, 4: Letters (A-Z)
+    // Position 1, 3, 5: Numbers (0-9)
     
-    if (position === 0 || position === 2 || position === 5) {
+    if (position === 0 || position === 2 || position === 4) {
       return /[A-Za-z]/.test(char);
-    } else if (position === 1 || position === 4 || position === 6) {
+    } else if (position === 1 || position === 3 || position === 5) {
       return /\d/.test(char);
     }
     
     return false; // Invalid position
   };
 
-  // Format Canadian postal code (A1A 1A1) with real-time validation and auto-space
+  // Format Canadian postal code (A1A1A1) with real-time validation - no spaces
   const formatCanadianPostalCode = (newChar: string, currentValue: string) => {
-    // Remove spaces for position calculation
-    const withoutSpaces = currentValue.replace(/\s/g, '');
-    const position = withoutSpaces.length;
+    const position = currentValue.length;
     
-    // Don't allow more than 6 characters (excluding space)
+    // Don't allow more than 6 characters
     if (position >= 6) {
       setFormatError(true);
       setTimeout(() => setFormatError(false), 300);
@@ -158,15 +156,8 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
       return currentValue; // Don't add the character
     }
     
-    // Add the character and format
-    const newValueWithoutSpace = withoutSpaces + newChar.toUpperCase();
-    
-    // Automatically add space after 3rd character
-    if (newValueWithoutSpace.length > 3) {
-      return newValueWithoutSpace.slice(0, 3) + ' ' + newValueWithoutSpace.slice(3);
-    }
-    
-    return newValueWithoutSpace;
+    // Add the character - no space formatting needed
+    return currentValue + newChar.toUpperCase();
   };
 
   const handleContinue = () => {
@@ -177,9 +168,8 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
     // Email validation
     const emailValid = details.email.includes('@') && details.email.includes('.');
     
-    // Enhanced postal code validation - Canadian format A1A 1A1
-    const postalCodeClean = details.postalCode.replace(/\s/g, '');
-    const postalCodeValid = postalCodeClean.length === 6 && /^[A-Z]\d[A-Z]\d[A-Z]\d$/.test(postalCodeClean);
+    // Enhanced postal code validation - A1A1A1 format (no spaces)
+    const postalCodeValid = details.postalCode.length === 6 && /^[A-Z]\d[A-Z]\d[A-Z]\d$/.test(details.postalCode);
     
     return emailValid && postalCodeValid;
   };
@@ -279,7 +269,7 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
                 className={`${formatError ? 'format-error flicker' : ''}`}
                 readOnly
               />
-              {details.postalCode && details.postalCode.replace(/\s/g, '').length === 6 && /^[A-Z]\d[A-Z]\d[A-Z]\d$/.test(details.postalCode.replace(/\s/g, '')) && (
+              {details.postalCode && details.postalCode.length === 6 && /^[A-Z]\d[A-Z]\d[A-Z]\d$/.test(details.postalCode) && (
                 <span className="validation-check">✓</span>
               )}
             </div>

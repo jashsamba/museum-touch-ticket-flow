@@ -77,8 +77,8 @@ const translations = {
     yourDetailsSubtitle: 'Please enter your details before checking out.',
     emailAddress: 'Email address*',
     emailPlaceholder: 'Enter your email address',
-    postalCodeLabel: 'Postal code* (A1A 1A1 format)',
-    postalCodePlaceholder: 'A1A 1A1',
+    postalCodeLabel: 'Postal code* (A1A1A1 format)',
+    postalCodePlaceholder: 'A1A1A1',
     firstName: 'First Name',
     lastName: 'Last Name',
     email: 'Email Address',
@@ -99,7 +99,7 @@ const translations = {
     
     // Keyboard
     enterEmailAddress: 'Enter your email address',
-    enterPostalCode: 'Enter your postal code (A1A 1A1 format)',
+    enterPostalCode: 'Enter your postal code (A1A1A1 format)',
     startTyping: 'Start typing...',
     
     // Completion Screen
@@ -170,8 +170,8 @@ const translations = {
     yourDetailsSubtitle: 'Veuillez entrer vos détails avant de commander.',
     emailAddress: 'Adresse courriel*',
     emailPlaceholder: 'Entrez votre adresse courriel',
-    postalCodeLabel: 'Code postal* (format A1A 1A1)',
-    postalCodePlaceholder: 'A1A 1A1',
+    postalCodeLabel: 'Code postal* (format A1A1A1)',
+    postalCodePlaceholder: 'A1A1A1',
     firstName: 'Prénom',
     lastName: 'Nom de famille',
     email: 'Adresse courriel',
@@ -192,7 +192,7 @@ const translations = {
     
     // Keyboard
     enterEmailAddress: 'Entrez votre adresse courriel',
-    enterPostalCode: 'Entrez votre code postal (format A1A 1A1)',
+    enterPostalCode: 'Entrez votre code postal (format A1A1A1)',
     startTyping: 'Commencez à taper...',
     
     // Completion Screen
