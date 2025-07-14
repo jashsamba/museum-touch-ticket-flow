@@ -21,7 +21,15 @@ CURRENT SESSION CHANGES:
    - Enhanced keyboard overlay with backdrop blur effect
    - Improved user experience for email input
 
-3. CART SYNCHRONIZATION FIXES (2025-07-14)
+3. POSTAL CODE KEYBOARD FIXES (2025-07-14)
+   - Fixed space button not working in postal code input field
+   - Removed 3-character space auto-formatting restriction
+   - Updated postal code to accept any 6 alphanumeric characters
+   - Simplified postal code validation from Canadian A1A 1A1 format to simple 6-character requirement
+   - Removed space key from postal code virtual keyboard layout
+   - Updated all postal code labels and placeholders to reflect 6-character format
+
+4. CART SYNCHRONIZATION FIXES (2025-07-14)
    - Fixed cart state persistence across navigation
    - Moved cart state management from TicketSelectionScreen to KioskInterface
    - Ensured cart selections survive page transitions
@@ -29,13 +37,13 @@ CURRENT SESSION CHANGES:
    - Added complete donation options to all cart displays
    - Fixed cart item generation to include all add-ons (donations, field trip, bus subsidy)
 
-4. NAVIGATION FIXES (2025-07-14)
+5. NAVIGATION FIXES (2025-07-14)
    - Fixed back button labels to show previous page name instead of current page
    - Updated TicketSelectionScreen back button: "← Main Screen"
    - Updated DetailsScreen back button: "← Checkout"  
    - Updated CheckoutScreen back button: "← Details"
 
-5. DETAILS SCREEN SIMPLIFICATION (2025-07-14)
+6. DETAILS SCREEN SIMPLIFICATION (2025-07-14)
    - Removed first name field (not required)
    - Removed last name field (not required)
    - Removed contact number field (not required)
