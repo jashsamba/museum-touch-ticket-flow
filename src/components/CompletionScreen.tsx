@@ -111,6 +111,13 @@ const CompletionScreen: React.FC<CompletionScreenProps> = ({ onStartOver, orderD
               ⚙️ Configure n8n Webhook
             </button>
             
+            <button 
+              className="webhook-config-button"
+              onClick={() => alert(`Current n8n URL: ${SERVICES_CONFIG.N8N.WEBHOOK_URL}\n\nMuseum: ${SERVICES_CONFIG.MUSEUM.NAME}\n\nConfig file: src/lib/utils.ts`)}
+            >
+              📋 View Current Settings
+            </button>
+            
             {webhookUrl && (
               <button 
                 className="webhook-trigger-button"
@@ -124,7 +131,12 @@ const CompletionScreen: React.FC<CompletionScreenProps> = ({ onStartOver, orderD
           {showWebhookConfig && (
             <div className="webhook-config">
               <h3>n8n Webhook Configuration</h3>
-              <p>Enter your n8n webhook URL to automatically send email receipts:</p>
+              <p>Current webhook URL: <strong>{SERVICES_CONFIG.N8N.WEBHOOK_URL}</strong></p>
+              <p>Status: <strong className={SERVICES_CONFIG.N8N.ENABLED ? "status enabled" : "status disabled"}>
+                {SERVICES_CONFIG.N8N.ENABLED ? "✅ Enabled" : "❌ Disabled"}
+              </strong></p>
+              <p>To change these settings, edit <code>src/lib/utils.ts</code></p>
+              
               <input
                 type="url"
                 placeholder={getN8nWebhookUrl()}
