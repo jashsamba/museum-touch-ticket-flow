@@ -32,7 +32,7 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
     ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'],
     ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
     ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
-    ['z', 'x', 'c', 'v', 'b', 'n', 'm', 'space', '←']
+    ['z', 'x', 'c', 'v', 'b', 'n', 'm', '←']
   ];
 
   // Get the appropriate keyboard layout based on active field
@@ -114,11 +114,18 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
     return patterns[position].test(char);
   };
 
-  // Format Canadian postal code (A1A 1A1) with real-time validation
+  // Format Canadian postal code (A1A 1A1) with real-time validation and auto-space
   const formatCanadianPostalCode = (newChar: string, currentValue: string) => {
     // Remove spaces for position calculation
     const withoutSpaces = currentValue.replace(/\s/g, '');
     const position = withoutSpaces.length;
+    
+    // Don't allow more than 6 characters (excluding space)
+    if (position >= 6) {
+      setFormatError(true);
+      setTimeout(() => setFormatError(false), 300);
+      return currentValue;
+    }
     
     // Check if the new character is valid at this position
     if (!isValidCharacterAtPosition(newChar, position)) {
@@ -129,18 +136,14 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
     }
     
     // Add the character and format
-    const newValue = (currentValue + newChar).toUpperCase();
-    const cleaned = newValue.replace(/\s/g, '');
+    const newValueWithoutSpace = withoutSpaces + newChar.toUpperCase();
     
-    // Limit to 6 characters (3 letters + 3 numbers)
-    const limited = cleaned.slice(0, 6);
-    
-    // Add space after 3rd character if we have more than 3 characters
-    if (limited.length > 3) {
-      return limited.slice(0, 3) + ' ' + limited.slice(3);
+    // Automatically add space after 3rd character
+    if (newValueWithoutSpace.length > 3) {
+      return newValueWithoutSpace.slice(0, 3) + ' ' + newValueWithoutSpace.slice(3);
     }
     
-    return limited;
+    return newValueWithoutSpace;
   };
 
   const handleContinue = () => {
