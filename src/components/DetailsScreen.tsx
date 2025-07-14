@@ -78,55 +78,59 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
       // Regular character
       if (activeField) {
         const currentValue = String(details[activeField as keyof typeof details]);
-        let newValue = currentValue + key;
         
-        // Format postal code for Canada (A1A 1A1)
+        // Format postal code for Canada (A1A 1A1) with real-time validation
         if (activeField === 'postalCode') {
-          newValue = formatCanadianPostalCode(newValue);
+          const newValue = formatCanadianPostalCode(key, currentValue);
+          setDetails(prev => ({
+            ...prev,
+            [activeField]: newValue
+          }));
+        } else {
+          // For email field, just add the character
+          setDetails(prev => ({
+            ...prev,
+            [activeField]: currentValue + key
+          }));
         }
-        
-        setDetails(prev => ({
-          ...prev,
-          [activeField]: newValue
-        }));
       }
     }
   };
 
-  // Validate postal code format in real-time
-  const validatePostalCodeFormat = (value: string) => {
-    // Canadian postal code pattern: Letter-Number-Letter Number-Letter-Number
-    const expectedPattern = ['letter', 'number', 'letter', 'space', 'number', 'letter', 'number'];
+  // Validate if character is allowed at specific position for postal code
+  const isValidCharacterAtPosition = (char: string, position: number) => {
+    // Canadian postal code pattern: A1A 1A1
+    const patterns = [
+      /[A-Za-z]/, // Position 0: Letter
+      /\d/,       // Position 1: Number
+      /[A-Za-z]/, // Position 2: Letter
+      /\s/,       // Position 3: Space (auto-added)
+      /\d/,       // Position 4: Number
+      /[A-Za-z]/, // Position 5: Letter
+      /\d/        // Position 6: Number
+    ];
     
-    for (let i = 0; i < value.length && i < expectedPattern.length; i++) {
-      const char = value[i];
-      const expected = expectedPattern[i];
-      
-      if (expected === 'letter' && !/[A-Z]/i.test(char)) {
-        return false;
-      }
-      if (expected === 'number' && !/\d/.test(char)) {
-        return false;
-      }
-      if (expected === 'space' && char !== ' ') {
-        return false;
-      }
-    }
-    return true;
+    if (position >= patterns.length) return false;
+    return patterns[position].test(char);
   };
 
-  // Format Canadian postal code (A1A 1A1)
-  const formatCanadianPostalCode = (value: string) => {
-    // Remove all spaces and make uppercase
-    const cleaned = value.replace(/\s/g, '').toUpperCase();
+  // Format Canadian postal code (A1A 1A1) with real-time validation
+  const formatCanadianPostalCode = (newChar: string, currentValue: string) => {
+    // Remove spaces for position calculation
+    const withoutSpaces = currentValue.replace(/\s/g, '');
+    const position = withoutSpaces.length;
     
-    // Validate format as user types
-    const isValidFormat = validatePostalCodeFormat(value.toUpperCase());
-    
-    if (!isValidFormat && value.length > 0) {
+    // Check if the new character is valid at this position
+    if (!isValidCharacterAtPosition(newChar, position)) {
+      // Trigger error animation
       setFormatError(true);
-      setTimeout(() => setFormatError(false), 300); // Clear error after 300ms
+      setTimeout(() => setFormatError(false), 300);
+      return currentValue; // Don't add the character
     }
+    
+    // Add the character and format
+    const newValue = (currentValue + newChar).toUpperCase();
+    const cleaned = newValue.replace(/\s/g, '');
     
     // Limit to 6 characters (3 letters + 3 numbers)
     const limited = cleaned.slice(0, 6);
