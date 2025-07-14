@@ -1,22 +1,44 @@
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useSecurePurchase } from '../hooks/useSecurePurchase';
 
 interface CheckoutScreenProps {
   onComplete: () => void;
   onBack: () => void;
-  totals: any;
+  totals: {
+    subtotal: number;
+    tax: number;
+    service_fee: number;
+    total: number;
+  };
   quantities: {[key: string]: number};
   addOns: {[key: string]: number};
   userEmail?: string;
+  userDetails?: {
+    firstName: string;
+    lastName: string;
+    contactNumber?: string;
+    postalCode?: string;
+  };
 }
 
-const CheckoutScreen: React.FC<CheckoutScreenProps> = ({ onComplete, onBack, totals, quantities, addOns, userEmail }) => {
+const CheckoutScreen: React.FC<CheckoutScreenProps> = ({ 
+  onComplete, 
+  onBack, 
+  totals, 
+  quantities, 
+  addOns, 
+  userEmail, 
+  userDetails 
+}) => {
   const { t } = useLanguage();
+  const { processPurchase, processing: purchaseProcessing } = useSecurePurchase();
   const [processing, setProcessing] = useState(false);
   const [paymentSuccessful, setPaymentSuccessful] = useState(false);
   const [emailSent, setEmailSent] = useState(false);
   const [emailSending, setEmailSending] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [purchaseError, setPurchaseError] = useState<string | null>(null);
 
   // Update time every second
   useEffect(() => {
@@ -98,30 +120,68 @@ const CheckoutScreen: React.FC<CheckoutScreenProps> = ({ onComplete, onBack, tot
   const cartItems = generateCartItems();
   const totalItemCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
+  const handleSecurePurchase = async () => {
+    if (!userEmail || !userDetails) {
+      setPurchaseError('Missing required customer information');
+      return;
+    }
+
+    try {
+      setPurchaseError(null);
+      
+      const purchaseData = {
+        first_name: userDetails.firstName,
+        last_name: userDetails.lastName,
+        email: userEmail,
+        contact_number: userDetails.contactNumber,
+        postal_code: userDetails.postalCode,
+        tickets: quantities,
+        add_ons: addOns,
+        totals: totals,
+      };
+
+      const result = await processPurchase(purchaseData);
+      
+      if (result.success) {
+        setPaymentSuccessful(true);
+        console.log('Purchase completed successfully:', result.purchase_id);
+        
+        // Auto-advance to completion after successful purchase
+        setTimeout(() => {
+          onComplete();
+        }, 2000);
+      } else {
+        setPurchaseError(result.error || 'Purchase failed');
+        console.error('Purchase failed:', result.error, result.details);
+      }
+    } catch (error) {
+      console.error('Purchase processing error:', error);
+      setPurchaseError('Network error. Please try again.');
+    }
+  };
+
   const handleSendReceipt = async () => {
     if (!userEmail || emailSent || emailSending) return;
     
     setEmailSending(true);
     
     try {
-      // Simulate sending receipt (since the webhook URL is failing)
+      // Simulate sending receipt
       console.log('Sending receipt to:', userEmail);
       console.log('Order details:', { tickets: quantities, addOns: addOns, totals: totals });
       
-      // Simulate a short delay for sending
       await new Promise(resolve => setTimeout(resolve, 1500));
       
       setEmailSent(true);
       console.log('Receipt email sent successfully');
       
-      // Go to completion page after successful send
       setTimeout(() => {
         onComplete();
       }, 500);
       
     } catch (error) {
       console.error('Failed to send receipt email:', error);
-      setEmailSent(true); // Still proceed to completion page
+      setEmailSent(true);
       setTimeout(() => {
         onComplete();
       }, 500);
@@ -131,13 +191,13 @@ const CheckoutScreen: React.FC<CheckoutScreenProps> = ({ onComplete, onBack, tot
   };
 
   useEffect(() => {
-    // Simulate payment processing after 3 seconds
+    // Simulate payment processing, then trigger secure purchase
     const timer = setTimeout(() => {
       setProcessing(true);
-      // After another 3 seconds, show payment successful
+      // After 3 seconds, trigger the secure purchase process
       setTimeout(() => {
         setProcessing(false);
-        setPaymentSuccessful(true);
+        handleSecurePurchase();
       }, 3000);
     }, 3000);
 
@@ -190,7 +250,22 @@ const CheckoutScreen: React.FC<CheckoutScreenProps> = ({ onComplete, onBack, tot
             </div>
 
             <div className="payment-instructions">
-              {paymentSuccessful ? (
+              {purchaseError ? (
+                <div className="payment-error-message">
+                  <div className="error-icon">⚠️</div>
+                  <p style={{ color: '#dc2626' }}>{purchaseError}</p>
+                  <button 
+                    className="retry-button"
+                    onClick={() => {
+                      setPurchaseError(null);
+                      handleSecurePurchase();
+                    }}
+                    disabled={purchaseProcessing}
+                  >
+                    {purchaseProcessing ? t('processing') : t('retry')}
+                  </button>
+                </div>
+              ) : paymentSuccessful ? (
                 <div className="payment-success-message">
                   <div className="success-checkmark">✓</div>
                   <p>{t('paymentSuccessful')}</p>
@@ -213,10 +288,10 @@ const CheckoutScreen: React.FC<CheckoutScreenProps> = ({ onComplete, onBack, tot
                     </button>
                   )}
                 </div>
-              ) : processing ? (
+              ) : processing || purchaseProcessing ? (
                 <div className="processing-message">
                   <div className="spinner"></div>
-                  <p>{t('processingPayment')}</p>
+                  <p>{processing ? t('processingPayment') : t('securingPurchase')}</p>
                 </div>
               ) : (
                 <p>{t('pinPadInstructions')}</p>
@@ -226,7 +301,7 @@ const CheckoutScreen: React.FC<CheckoutScreenProps> = ({ onComplete, onBack, tot
 
         <button 
           className="start-over-button" 
-          disabled={processing || paymentSuccessful}
+          disabled={processing || paymentSuccessful || purchaseProcessing}
         >
           {t('startOver')}
         </button>
