@@ -32,7 +32,7 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
     ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'],
     ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
     ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
-    ['z', 'x', 'c', 'v', 'b', 'n', 'm', '←']
+    ['z', 'x', 'c', 'v', 'b', 'n', 'm', 'space', '←']
   ];
 
   const getCurrentKeyboardLayout = () => {
@@ -59,8 +59,19 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
       setShowKeyboard(false);
       setActiveField(null);
     } else if (key === 'space') {
-      // Space
-      if (activeField) {
+      // Space handling
+      if (activeField === 'postalCode') {
+        // For postal code, only allow space at position 3 (after A1A)
+        const currentValue = String(details[activeField]);
+        const withoutSpaces = currentValue.replace(/\s/g, '');
+        if (withoutSpaces.length === 3) {
+          setDetails(prev => ({
+            ...prev,
+            [activeField]: withoutSpaces + ' '
+          }));
+        }
+      } else if (activeField === 'email') {
+        // For email, just add space
         setDetails(prev => ({
           ...prev,
           [activeField]: String(prev[activeField as keyof typeof prev]) + ' '
