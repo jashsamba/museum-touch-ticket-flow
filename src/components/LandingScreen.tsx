@@ -21,6 +21,7 @@ const LandingScreen: React.FC<LandingScreenProps> = ({ onStartFlow }) => {
           onClick={onStartFlow}
         >
           {t('buyTickets')}
+          <span className="payment-notice">{t('singleCardPayment')}</span>
         </button>
       </div>
     </div>
