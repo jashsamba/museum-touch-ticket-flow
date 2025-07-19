@@ -65,12 +65,11 @@ const TicketSelectionScreen: React.FC<TicketSelectionScreenProps> = ({
     { id: 'student-general', name: t('studentGeneral'), price: 16.99, details: t('details') }
   ];
 
-  const addOnItems: AddOnItem[] = [
-    { id: 'donation-5', name: t('donation5'), price: 5.00 },
-    { id: 'donation-10', name: t('donation10'), price: 10.00 },
-    { id: 'donation-25', name: t('donation25'), price: 25.00 },
-    { id: 'field-trip', name: t('fieldTrip'), price: 17.00 },
-    { id: 'bus-subsidy', name: t('busSubsidy'), price: 15.00 }
+  const donationItems: AddOnItem[] = [
+    { id: 'donation-10', name: '$10.00 Donation', price: 10.00 },
+    { id: 'donation-15', name: '$15.00 Donation', price: 15.00 },
+    { id: 'donation-25', name: '$25.00 Donation', price: 25.00 },
+    { id: 'field-trip', name: 'Donate to support a field trip for an entire class!', price: 300.00 }
   ];
 
 
@@ -79,7 +78,7 @@ const TicketSelectionScreen: React.FC<TicketSelectionScreenProps> = ({
       return total + (quantities[ticket.id] || 0) * ticket.price;
     }, 0);
     
-    const addOnTotal = addOnItems.reduce((total, addOn) => {
+    const addOnTotal = donationItems.reduce((total, addOn) => {
       return total + (addOns[addOn.id] || 0) * addOn.price;
     }, 0);
     
@@ -115,13 +114,13 @@ const TicketSelectionScreen: React.FC<TicketSelectionScreenProps> = ({
       }
     });
     
-    // Add selected add-ons
-    addOnItems.forEach(addOn => {
+    // Add selected donations
+    donationItems.forEach(addOn => {
       const quantity = addOns[addOn.id] || 0;
       if (quantity > 0) {
         cartItems.push({
           id: addOn.id,
-          icon: '🎁',
+          icon: '💝',
           name: addOn.name,
           description: `${addOn.name} (${quantity})`,
           price: (quantity * addOn.price).toFixed(2),
@@ -165,43 +164,24 @@ const TicketSelectionScreen: React.FC<TicketSelectionScreenProps> = ({
             <p>{t('ticketDescription')}</p>
           </div>
 
-          <div className="ticket-section">
-            <h3>{t('selectTicketsTitle')}</h3>
-            {tickets.map(ticket => (
-              <div key={ticket.id} className="ticket-item">
-                <div className="ticket-details">
-                  <div className="ticket-name">{ticket.name}</div>
-                  <div className="ticket-price">${ticket.price}</div>
-                  <div className="ticket-actions">{ticket.details}</div>
-                </div>
-                <EnhancedQuantityControl
-                  quantity={quantities[ticket.id] || 0}
-                  onUpdate={(change) => onUpdateQuantity(ticket.id, change)}
-                  className="ticket-quantity"
-                />
-              </div>
-            ))}
-          </div>
-
-          <div className="addons-section">
-            <h3>{t('selectAddons')}</h3>
+          <div className="donation-section">
+            <h3>Donation</h3>
             <div className="donation-header">
-              <div className="donate-button">{t('donate')}</div>
-              <p>{t('donationText1')}</p>
-              <p>{t('donationText2')}</p>
-              <p>{t('donationText3')}</p>
+              <div className="donate-button">DONATE</div>
+              <p>Thanks for your generous support of THEMUSEUM! It's thanks to...</p>
+              <p className="read-more">Read more</p>
             </div>
             
-            {addOnItems.map(addOn => (
-              <div key={addOn.id} className="addon-item">
-                <div className="addon-details">
-                  <div className="addon-name">{addOn.name}</div>
-                  <div className="addon-price">${addOn.price.toFixed(2)}</div>
+            {donationItems.map(donation => (
+              <div key={donation.id} className="donation-item">
+                <div className="donation-details">
+                  <div className="donation-name">{donation.name}</div>
+                  <div className="donation-price">${donation.price.toFixed(2)}</div>
                 </div>
                 <EnhancedQuantityControl
-                  quantity={addOns[addOn.id] || 0}
-                  onUpdate={(change) => onUpdateQuantity(addOn.id, change, true)}
-                  className="addon-quantity"
+                  quantity={addOns[donation.id] || 0}
+                  onUpdate={(change) => onUpdateQuantity(donation.id, change, true)}
+                  className="donation-quantity"
                 />
               </div>
             ))}
