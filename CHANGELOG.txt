@@ -1,10 +1,16 @@
 KIOSK PROJECT - CHANGE LOG
 ==========================
 
-Last Updated: 2025-07-14 16:15:47 UTC (Current Session)
+Last Updated: 2025-07-19 (Current Session)
 
 CURRENT SESSION CHANGES:
 -----------------------
+
+- Donation Section Updates (2025-07-19):
+  * Updated donation amounts in TicketSelectionScreen to match business requirements
+  * Changed donation options to: $10, $15, $25 (standard donations) + $300 (field trip option)
+  * Maintained all existing functionality while updating display amounts
+  * Enhanced donation display format to match provided design specifications
 
 - Updated timestamp format to include seconds-level precision (16:15:47 UTC)
 - Implemented Phase 1 animation enhancements:
