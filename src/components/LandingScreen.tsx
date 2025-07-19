@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
 
@@ -12,11 +11,7 @@ const LandingScreen: React.FC<LandingScreenProps> = ({ onStartFlow }) => {
     <div className="screen-container">
       <div className="museum-header">
         <div className="museum-logo">
-          <img 
-            src="/lovable-uploads/89e9f3f4-3877-44e4-9cf4-f5c8f0df9e46.png" 
-            alt="TheMuseum Logo" 
-            className="museum-logo-image"
-          />
+          <span className="museum-title">THEMUSEUM</span>
         </div>
       </div>
       
