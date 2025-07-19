@@ -187,6 +187,7 @@ const TicketSelectionScreen: React.FC<TicketSelectionScreenProps> = ({
             <div className="donation-header">
               <h4>DONATION ADD-ON</h4>
               <p>Thanks for your generous support of THEMUSEUM! It's thanks to...</p>
+              <p>Thanks for your generous support of THEMUSEUM! It's thanks to...</p>
               <div className="donate-button">DONATE</div>
             </div>
             
