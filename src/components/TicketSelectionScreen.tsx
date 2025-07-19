@@ -66,11 +66,10 @@ const TicketSelectionScreen: React.FC<TicketSelectionScreenProps> = ({
   ];
 
   const addOnItems: AddOnItem[] = [
-    { id: 'donation-5', name: t('donation5'), price: 5.00 },
-    { id: 'donation-10', name: t('donation10'), price: 10.00 },
-    { id: 'donation-25', name: t('donation25'), price: 25.00 },
-    { id: 'field-trip', name: t('fieldTrip'), price: 17.00 },
-    { id: 'bus-subsidy', name: t('busSubsidy'), price: 15.00 }
+    { id: 'donation-10', name: '$10.00 Donation', price: 10.00 },
+    { id: 'donation-15', name: '$15.00 Donation', price: 15.00 },
+    { id: 'donation-25', name: '$25.00 Donation', price: 25.00 },
+    { id: 'field-trip', name: 'Donate to support a field trip for an entire class!', price: 300.00 }
   ];
 
 
@@ -186,10 +185,9 @@ const TicketSelectionScreen: React.FC<TicketSelectionScreenProps> = ({
           <div className="addons-section">
             <h3>{t('selectAddons')}</h3>
             <div className="donation-header">
-              <div className="donate-button">{t('donate')}</div>
-              <p>{t('donationText1')}</p>
-              <p>{t('donationText2')}</p>
-              <p>{t('donationText3')}</p>
+              <h4>DONATION ADD-ON</h4>
+              <p>Thanks for your generous support of THEMUSEUM! It's thanks to...</p>
+              <div className="donate-button">DONATE</div>
             </div>
             
             {addOnItems.map(addOn => (
