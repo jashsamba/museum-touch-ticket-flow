@@ -22,14 +22,14 @@ interface CheckoutScreenProps {
   };
 }
 
-const CheckoutScreen: React.FC<CheckoutScreenProps> = ({ 
-  onComplete, 
-  onBack, 
-  totals, 
-  quantities, 
-  addOns, 
-  userEmail, 
-  userDetails 
+const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
+  onComplete,
+  onBack,
+  totals,
+  quantities,
+  addOns,
+  userEmail,
+  userDetails
 }) => {
   const { t } = useLanguage();
   const { processPurchase, processing: purchaseProcessing } = useSecurePurchase();
@@ -51,10 +51,10 @@ const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
 
   // Format time as "11:00AM | September 23, 2025"
   const formatDateTime = (date: Date) => {
-    const timeString = date.toLocaleTimeString('en-US', { 
-      hour: 'numeric', 
+    const timeString = date.toLocaleTimeString('en-US', {
+      hour: 'numeric',
       minute: '2-digit',
-      hour12: true 
+      hour12: true
     });
     const dateString = date.toLocaleDateString('en-US', {
       year: 'numeric',
@@ -83,7 +83,7 @@ const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
   // Generate dynamic cart items based on current selections
   const generateCartItems = () => {
     const cartItems = [];
-    
+
     // Add selected tickets
     tickets.forEach(ticket => {
       const quantity = quantities[ticket.id] || 0;
@@ -98,7 +98,7 @@ const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
         });
       }
     });
-    
+
     // Add selected add-ons
     addOnItems.forEach(addOn => {
       const quantity = addOns[addOn.id] || 0;
@@ -113,7 +113,7 @@ const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
         });
       }
     });
-    
+
     return cartItems;
   };
 
@@ -129,21 +129,21 @@ const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
 
     try {
       setPurchaseError(null);
-      
+
       // For now, just simulate successful payment
       setPaymentSuccessful(true);
       console.log('Payment simulation completed successfully');
-      
+
       // Auto-advance to completion after successful payment
       setTimeout(() => {
         onComplete();
       }, 2000);
-      
+
       // TODO: Implement actual secure purchase when customer details are ready
       /*
       const purchaseData = {
         first_name: userDetails?.firstName || 'Guest',
-        last_name: userDetails?.lastName || 'User', 
+        last_name: userDetails?.lastName || 'User',
         email: userEmail || 'guest@example.com',
         contact_number: userDetails?.contactNumber,
         postal_code: userDetails?.postalCode,
@@ -153,11 +153,11 @@ const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
       };
 
       const result = await processPurchase(purchaseData);
-      
+
       if (result.success) {
         setPaymentSuccessful(true);
         console.log('Purchase completed successfully:', result.purchase_id);
-        
+
         setTimeout(() => {
           onComplete();
         }, 2000);
@@ -174,23 +174,23 @@ const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
 
   const handleSendReceipt = async () => {
     if (!userEmail || emailSent || emailSending) return;
-    
+
     setEmailSending(true);
-    
+
     try {
       // Simulate sending receipt
       console.log('Sending receipt to:', userEmail);
       console.log('Order details:', { tickets: quantities, addOns: addOns, totals: totals });
-      
+
       await new Promise(resolve => setTimeout(resolve, 1500));
-      
+
       setEmailSent(true);
       console.log('Receipt email sent successfully');
-      
+
       setTimeout(() => {
         onComplete();
       }, 500);
-      
+
     } catch (error) {
       console.error('Failed to send receipt email:', error);
       setEmailSent(true);
@@ -219,8 +219,8 @@ const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
   return (
     <div className="screen-container">
       <div className="museum-header">
-        <button 
-          className="back-button" 
+        <button
+          className="back-button"
           onClick={onBack}
           disabled={processing || paymentSuccessful}
         >
@@ -236,7 +236,7 @@ const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
               <span className="payment-label">{t('cardPayment')}</span>
               <span className="payment-total">${totals.total}</span>
             </div>
-            
+
             <div className="terminal-icon">
               <div className="card-reader">
                 <div className="card-slot"></div>
@@ -266,7 +266,7 @@ const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                 <div className="payment-error-message">
                   <div className="error-icon">⚠️</div>
                   <p style={{ color: '#dc2626' }}>{purchaseError}</p>
-                  <button 
+                  <button
                     className="retry-button"
                     onClick={() => {
                       setPurchaseError(null);
@@ -282,7 +282,7 @@ const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
                   <div className="success-checkmark">✓</div>
                   <p>{t('paymentSuccessful')}</p>
                   {userEmail && (
-                    <button 
+                    <button
                       className={`send-receipt-button ${emailSent ? 'sent' : ''} ${emailSending ? 'sending' : ''} enabled`}
                       onClick={handleSendReceipt}
                       disabled={emailSent || emailSending}
@@ -311,8 +311,8 @@ const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
             </div>
           </div>
 
-        <button 
-          className="start-over-button" 
+        <button
+          className="start-over-button"
           disabled={processing || paymentSuccessful || purchaseProcessing}
         >
           {t('startOver')}
@@ -323,12 +323,12 @@ const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
           <div className="cart-header">
             <span className="cart-label">{t('yourCart')}</span>
             <span className="item-count">
-              {totalItemCount === 0 ? t('noItems') : 
-               totalItemCount === 1 ? `1 ${t('item')}` : 
+              {totalItemCount === 0 ? t('noItems') :
+               totalItemCount === 1 ? `1 ${t('item')}` :
                `${totalItemCount} ${t('items')}`}
             </span>
           </div>
-          
+
           <div className="cart-items">
             {cartItems.length === 0 ? (
               <div className="empty-cart">

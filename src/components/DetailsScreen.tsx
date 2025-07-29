@@ -12,6 +12,8 @@ interface DetailsScreenProps {
 const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, totals, quantities, addOns }) => {
   const { t } = useLanguage();
   const [details, setDetails] = useState({
+    firstName: '',
+    lastName: '',
     email: '',
     postalCode: ''
   });
@@ -32,10 +34,10 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
 
   // Format time as "11:00AM | September 23, 2025"
   const formatDateTime = (date: Date) => {
-    const timeString = date.toLocaleTimeString('en-US', { 
-      hour: 'numeric', 
+    const timeString = date.toLocaleTimeString('en-US', {
+      hour: 'numeric',
       minute: '2-digit',
-      hour12: true 
+      hour12: true
     });
     const dateString = date.toLocaleDateString('en-US', {
       year: 'numeric',
@@ -50,7 +52,14 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
     ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
     ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
     ['⇧', 'z', 'x', 'c', 'v', 'b', 'n', 'm', '-', '⇧'],
-    ['@gmail.com', '@outlook.com', '@yahoo.com', '@hotmail.com', 'space', '←']
+    ['space', '←']
+  ];
+  const nameKeyboardLayout = [
+    ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'],
+    ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
+    ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
+    ['⇧', 'z', 'x', 'c', 'v', 'b', 'n', 'm', '-', '⇧'],
+    ['space', '←']
   ];
 
   const postalCodeKeyboardLayout = [
@@ -61,7 +70,9 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
   ];
 
   const getCurrentKeyboardLayout = () => {
-    return activeField === 'postalCode' ? postalCodeKeyboardLayout : emailKeyboardLayout;
+    if (activeField === 'postalCode') return postalCodeKeyboardLayout;
+    if (activeField === 'firstName' || activeField === 'lastName') return nameKeyboardLayout;
+    return emailKeyboardLayout;
   };
 
   const handleFieldFocus = (fieldName: string) => {
@@ -103,13 +114,19 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
       // Regular character
       if (activeField) {
         const currentValue = String(details[activeField as keyof typeof details]);
-        
         if (activeField === 'postalCode') {
-          // Enhanced postal code validation - Canadian format A1A 1A1
+          // Disable typing after 3 characters
+          if (currentValue.length >= 3) return;
           const newValue = formatCanadianPostalCode(key, currentValue);
           setDetails(prev => ({
             ...prev,
             [activeField]: newValue
+          }));
+        } else if (activeField === 'firstName' || activeField === 'lastName') {
+          // For name fields, just add the character
+          setDetails(prev => ({
+            ...prev,
+            [activeField]: currentValue + key
           }));
         } else {
           // For email field, just add the character
@@ -127,27 +144,27 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
     // Canadian postal code pattern: A1A1A1 (no spaces)
     // Position 0, 2, 4: Letters (A-Z)
     // Position 1, 3, 5: Numbers (0-9)
-    
+
     if (position === 0 || position === 2 || position === 4) {
       return /[A-Za-z]/.test(char);
     } else if (position === 1 || position === 3 || position === 5) {
       return /\d/.test(char);
     }
-    
+
     return false; // Invalid position
   };
 
   // Format Canadian postal code (A1A1A1) with real-time validation - no spaces
   const formatCanadianPostalCode = (newChar: string, currentValue: string) => {
     const position = currentValue.length;
-    
+
     // Don't allow more than 6 characters
     if (position >= 6) {
       setFormatError(true);
       setTimeout(() => setFormatError(false), 300);
       return currentValue;
     }
-    
+
     // Check if the new character is valid at this position
     if (!isValidCharacterAtPosition(newChar, position)) {
       // Trigger error animation
@@ -155,7 +172,7 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
       setTimeout(() => setFormatError(false), 300);
       return currentValue; // Don't add the character
     }
-    
+
     // Add the character - no space formatting needed
     return currentValue + newChar.toUpperCase();
   };
@@ -167,11 +184,11 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
   const isValidForm = () => {
     // Email validation
     const emailValid = details.email.includes('@') && details.email.includes('.');
-    
-    // Enhanced postal code validation - A1A1A1 format (no spaces)
-    const postalCodeValid = details.postalCode.length === 6 && /^[A-Z]\d[A-Z]\d[A-Z]\d$/.test(details.postalCode);
-    
-    return emailValid && postalCodeValid;
+    // Enhanced postal code validation - A1A1A1 format (no spaces, only first 3 digits allowed)
+    const postalCodeValid = details.postalCode.length === 3 && /^[A-Z]\d[A-Z]$/.test(details.postalCode);
+    // Name validation
+    const nameValid = details.firstName.trim().length > 0 && details.lastName.trim().length > 0;
+    return emailValid && postalCodeValid && nameValid;
   };
 
   // Define ticket and add-on items (same as TicketSelectionScreen)
@@ -193,7 +210,7 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
   // Generate dynamic cart items based on current selections
   const generateCartItems = () => {
     const cartItems = [];
-    
+
     // Add selected tickets
     tickets.forEach(ticket => {
       const quantity = quantities[ticket.id] || 0;
@@ -208,7 +225,7 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
         });
       }
     });
-    
+
     // Add selected add-ons
     addOnItems.forEach(addOn => {
       const quantity = addOns[addOn.id] || 0;
@@ -223,7 +240,7 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
         });
       }
     });
-    
+
     return cartItems;
   };
 
@@ -246,6 +263,26 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
 
           <div className="details-form">
             <div className="form-field">
+              <label>{t('firstName')}</label>
+              <input
+                type="text"
+                placeholder={t('firstName')}
+                value={details.firstName}
+                onFocus={() => handleFieldFocus('firstName')}
+                readOnly
+              />
+            </div>
+            <div className="form-field">
+              <label>{t('lastName')}</label>
+              <input
+                type="text"
+                placeholder={t('lastName')}
+                value={details.lastName}
+                onFocus={() => handleFieldFocus('lastName')}
+                readOnly
+              />
+            </div>
+            <div className="form-field">
               <label>{t('emailAddress')}</label>
               <input
                 type="email"
@@ -258,7 +295,6 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
                 <span className="validation-check">✓</span>
               )}
             </div>
-
             <div className="form-field">
               <label>{t('postalCodeLabel')}</label>
               <input
@@ -269,12 +305,12 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
                 className={`${formatError ? 'format-error flicker' : ''}`}
                 readOnly
               />
-              {details.postalCode && details.postalCode.length === 6 && /^[A-Z]\d[A-Z]\d[A-Z]\d$/.test(details.postalCode) && (
+              {details.postalCode && details.postalCode.length === 3 && /^[A-Z]\d[A-Z]$/.test(details.postalCode) && (
                 <span className="validation-check">✓</span>
               )}
             </div>
 
-            <button 
+            <button
               className="continue-button"
               disabled={!isValidForm()}
               onClick={handleContinue}
@@ -288,7 +324,15 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
               <div className="virtual-keyboard">
                 <div className="keyboard-header">
                   <span>
-                    {activeField === 'email' ? t('enterEmailAddress') : t('enterPostalCode')}
+                    {activeField === 'email'
+                      ? t('enterEmailAddress')
+                      : activeField === 'postalCode'
+                        ? t('enterPostalCode')
+                        : activeField === 'firstName'
+                          ? t('firstName')
+                          : activeField === 'lastName'
+                            ? t('lastName')
+                            : ''}
                   </span>
                   <button
                     className="keyboard-close"
@@ -300,20 +344,33 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
                     ✕
                   </button>
                 </div>
-                
+
                 <div className={`typing-display ${formatError ? 'typing-error' : ''}`}>
                   <div className="typing-label">
-                    {activeField === 'email' ? t('emailAddress') : t('postalCodeLabel')}
+                    {activeField === 'email'
+                      ? t('emailAddress')
+                      : activeField === 'postalCode'
+                        ? t('postalCodeLabel')
+                        : activeField === 'firstName'
+                          ? t('firstName')
+                          : activeField === 'lastName'
+                            ? t('lastName')
+                            : ''}
                   </div>
                   <div className="typing-input">
-                    {activeField === 'email' 
+                    {activeField === 'email'
                       ? (details.email || t('startTyping'))
-                      : (details.postalCode || t('postalCodePlaceholder'))
-                    }
+                      : activeField === 'postalCode'
+                        ? (details.postalCode || t('postalCodePlaceholder'))
+                        : activeField === 'firstName'
+                          ? (details.firstName || t('startTyping'))
+                          : activeField === 'lastName'
+                            ? (details.lastName || t('startTyping'))
+                            : ''}
                     <span className="typing-cursor">|</span>
                   </div>
                 </div>
-                
+
                 {getCurrentKeyboardLayout().map((row, rowIndex) => (
                   <div key={rowIndex} className="keyboard-row">
                     {row.map((key, keyIndex) => (
@@ -344,12 +401,12 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ onContinue, onBack, total
           <div className="cart-header">
             <span className="cart-label">{t('yourCart')}</span>
             <span className="item-count">
-              {totalItemCount === 0 ? t('noItems') : 
-               totalItemCount === 1 ? `1 ${t('item')}` : 
+              {totalItemCount === 0 ? t('noItems') :
+               totalItemCount === 1 ? `1 ${t('item')}` :
                `${totalItemCount} ${t('items')}`}
             </span>
           </div>
-          
+
           <div className="cart-items">
             {cartItems.length === 0 ? (
               <div className="empty-cart">

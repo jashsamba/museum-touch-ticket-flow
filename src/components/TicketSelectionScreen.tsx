@@ -24,12 +24,12 @@ interface TicketSelectionScreenProps {
   onUpdateQuantity: (id: string, change: number, isAddOn?: boolean) => void;
 }
 
-const TicketSelectionScreen: React.FC<TicketSelectionScreenProps> = ({ 
-  onContinue, 
-  onBack, 
-  quantities, 
-  addOns, 
-  onUpdateQuantity 
+const TicketSelectionScreen: React.FC<TicketSelectionScreenProps> = ({
+  onContinue,
+  onBack,
+  quantities,
+  addOns,
+  onUpdateQuantity
 }) => {
   const { t } = useLanguage();
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -45,10 +45,10 @@ const TicketSelectionScreen: React.FC<TicketSelectionScreenProps> = ({
 
   // Format time as "11:00AM | September 23, 2025"
   const formatDateTime = (date: Date) => {
-    const timeString = date.toLocaleTimeString('en-US', { 
-      hour: 'numeric', 
+    const timeString = date.toLocaleTimeString('en-US', {
+      hour: 'numeric',
       minute: '2-digit',
-      hour12: true 
+      hour12: true
     });
     const dateString = date.toLocaleDateString('en-US', {
       year: 'numeric',
@@ -59,16 +59,16 @@ const TicketSelectionScreen: React.FC<TicketSelectionScreenProps> = ({
   };
 
   const tickets: TicketItem[] = [
-    { id: 'adult-general', name: t('adultGeneral'), price: 19.99, details: t('details') },
-    { id: 'child-general', name: t('childGeneral'), price: 14.99, details: t('details') },
-    { id: 'senior-general', name: t('seniorGeneral'), price: 16.99, details: t('details') },
-    { id: 'student-general', name: t('studentGeneral'), price: 16.99, details: t('details') }
+    { id: 'adult-general', name: t('adultGeneral'), price: 19.99 },
+    { id: 'child-general', name: t('childGeneral'), price: 14.99 },
+    { id: 'senior-general', name: t('seniorGeneral'), price: 16.99 },
+    { id: 'student-general', name: t('studentGeneral'), price: 16.99 }
   ];
 
   const addOnItems: AddOnItem[] = [
-    { id: 'donation-10', name: '$10.00 Donation', price: 10.00 },
-    { id: 'donation-15', name: '$15.00 Donation', price: 15.00 },
-    { id: 'donation-25', name: '$25.00 Donation', price: 25.00 },
+    { id: 'donation-10', name: t('donation10'), price: 10.00 },
+    { id: 'donation-15', name: t('donation15'), price: 15.00 },
+    { id: 'donation-25', name: t('donation25'), price: 25.00 },
     { id: 'field-trip', name: 'Donate to support a field trip for an entire class!', price: 300.00 }
   ];
 
@@ -77,14 +77,14 @@ const TicketSelectionScreen: React.FC<TicketSelectionScreenProps> = ({
     const ticketTotal = tickets.reduce((total, ticket) => {
       return total + (quantities[ticket.id] || 0) * ticket.price;
     }, 0);
-    
+
     const addOnTotal = addOnItems.reduce((total, addOn) => {
       return total + (addOns[addOn.id] || 0) * addOn.price;
     }, 0);
-    
+
     const subtotal = ticketTotal + addOnTotal;
     const tax = subtotal * 0.13; // 13% tax
-    
+
     return {
       subtotal: subtotal.toFixed(2),
       tax: tax.toFixed(2),
@@ -98,7 +98,7 @@ const TicketSelectionScreen: React.FC<TicketSelectionScreenProps> = ({
   // Generate dynamic cart items based on current selections
   const generateCartItems = () => {
     const cartItems = [];
-    
+
     // Add selected tickets
     tickets.forEach(ticket => {
       const quantity = quantities[ticket.id] || 0;
@@ -113,7 +113,7 @@ const TicketSelectionScreen: React.FC<TicketSelectionScreenProps> = ({
         });
       }
     });
-    
+
     // Add selected add-ons
     addOnItems.forEach(addOn => {
       const quantity = addOns[addOn.id] || 0;
@@ -128,7 +128,7 @@ const TicketSelectionScreen: React.FC<TicketSelectionScreenProps> = ({
         });
       }
     });
-    
+
     return cartItems;
   };
 
@@ -161,7 +161,6 @@ const TicketSelectionScreen: React.FC<TicketSelectionScreenProps> = ({
 
           <div className="ticket-info">
             <h2>{t('museumGeneralAdmission')}</h2>
-            <p>{t('ticketDescription')}</p>
           </div>
 
           <div className="ticket-section">
@@ -186,11 +185,12 @@ const TicketSelectionScreen: React.FC<TicketSelectionScreenProps> = ({
             <h3>{t('selectAddons')}</h3>
             <div className="donation-header">
               <h4>DONATION ADD-ON</h4>
-              <p>Thanks for your generous support of THEMUSEUM! It's thanks to...</p>
-              <p>Donations of $20 or greater are eligible for tax receipt</p>
+              <p>{t('donationText1')}</p>
+              <p>{t('donationText2')}</p>
+              <p>{t('donationText3')}</p>
               <div className="donate-button">DONATE</div>
             </div>
-            
+
             {addOnItems.map(addOn => (
               <div key={addOn.id} className="addon-item">
                 <div className="addon-details">
@@ -210,7 +210,7 @@ const TicketSelectionScreen: React.FC<TicketSelectionScreenProps> = ({
             <div className="cart-total-text">{t('cartTotal')}: ${totals.total}</div>
             <div className="action-buttons">
               <button className="continue-shopping">{t('continueShopping')}</button>
-              <button 
+              <button
                 className={`checkout-button ${hasSelections ? 'button-pulse' : ''}`}
                 disabled={!hasSelections}
                 onClick={handleContinue}
@@ -225,12 +225,12 @@ const TicketSelectionScreen: React.FC<TicketSelectionScreenProps> = ({
           <div className="cart-header">
             <span className="cart-label">{t('yourCart')}</span>
             <span className="item-count">
-              {totalItemCount === 0 ? t('noItems') : 
-               totalItemCount === 1 ? `1 ${t('item')}` : 
+              {totalItemCount === 0 ? t('noItems') :
+               totalItemCount === 1 ? `1 ${t('item')}` :
                `${totalItemCount} ${t('items')}`}
             </span>
           </div>
-          
+
           <div className="cart-items">
             {cartItems.length === 0 ? (
               <div className="empty-cart">
@@ -268,7 +268,7 @@ const TicketSelectionScreen: React.FC<TicketSelectionScreenProps> = ({
             </div>
           </div>
 
-          <button 
+          <button
             className={`checkout-button-sidebar ${hasSelections ? 'button-pulse' : ''}`}
             disabled={!hasSelections}
             onClick={handleContinue}

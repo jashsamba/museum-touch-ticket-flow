@@ -23,16 +23,16 @@ const translations = {
     // Landing Screen
     buyTickets: 'BUY TICKETS',
     singleCardPayment: 'Single card payment only',
-    
+
     // Progress Steps
     selectTickets: 'Select Tickets',
     yourDetails: 'Your Details',
     payment: 'Payment',
     complete: 'Complete',
-    
+
     // Museum Header
     checkout: 'Checkout',
-    
+
     // Ticket Selection
     museumGeneralAdmission: 'THEMUSEUM General Admission',
     ticketDescription: 'Purchase tickets for general admission to THEMUSEUM as advance listed. Please print "read more" for details. Read more',
@@ -40,16 +40,17 @@ const translations = {
     adultGeneral: 'Adult General Admission (17+)',
     childGeneral: 'Child General Admission (4-17)',
     seniorGeneral: 'Senior General Admission (65+)',
-    studentGeneral: 'Student General Admission',
-    details: 'Details >',
-    selectAddons: 'Select Add-ons',
-    donate: 'DONATE',
-    donationText1: 'Thanks for your generous support of THEMUSEUM! It\'s thanks to you that THEMUSEUM continues to, grow, inspire and enlighten.',
-    donationText2: 'Donations of $10 or greater are eligible for a tax receipt.',
-    donationText3: 'Registered Name: THEMUSEUM of Hoax Transcending Objects Charitable Registration Number: 80709586001',
-    donation5: '$5.00 Donation "Recommended"',
+    donationText1: 'Thank you for your generous support of THEMUSEUM! It\'s thanks to you that THEMUSEUM continues to awe, inspire and enlighten.',
+    donationText2: 'Donations of $20 or greater are eligible for a tax receipt.',
+    donationText3: 'Registered Name: THEMUSEUM of Ideas Transcending Objects Charitable Registration Number: 80709586001',
     donation10: '$10.00 Donation',
+    selectAddons: 'Select Add-Ons',
+    donation15: '$15.00 Donation',
     donation25: '$25.00 Donation',
+    // donationText3: 'Registered Name: THEMUSEUM of Hoax Transcending Objects Charitable Registration Number: 80709586001',
+    donation5: '$5.00 Donation "Recommended"',
+    // donation10: '$10.00 Donation',
+    // donation25: '$25.00 Donation',
     fieldTrip: 'Donation for 1 student to attend a field trip free of charge!',
     busSubsidy: 'Sponsor a bus! Transportation subsidy for 1 class field trip.',
     cartTotal: 'Cart total',
@@ -66,19 +67,19 @@ const translations = {
     selectedTax: 'Selected tax',
     serviceFee: 'Service fee',
     totalIncTax: 'Total (inc. tax)',
-    
+
     // Navigation
     backToMain: '← Main Screen',
     backToCheckout: '← Checkout',
     backToDetails: '← Details',
-    
+
     // Details Screen
     yourDetailsTitle: 'Your Details',
     yourDetailsSubtitle: 'Please enter your details before checking out.',
     emailAddress: 'Email address*',
     emailPlaceholder: 'Enter your email address',
-    postalCodeLabel: 'Postal code* (A1A1A1 format)',
-    postalCodePlaceholder: 'A1A1A1',
+    postalCodeLabel: 'Postal code* (A1A format)',
+    postalCodePlaceholder: 'A1A',
     firstName: 'First Name',
     lastName: 'Last Name',
     email: 'Email Address',
@@ -86,7 +87,7 @@ const translations = {
     postalCode: 'Postal Code',
     newsletter: 'Send me newsletters and updates',
     continueButton: 'Continue',
-    
+
     // Checkout Screen
     cardPayment: 'Card payment:',
     pinPadInstructions: 'Please follow instructions\non the PIN pad terminal',
@@ -96,23 +97,23 @@ const translations = {
     emailSent: '✓ Email Sent',
     cardReader: 'Card Reader',
     startOver: 'START OVER',
-    
+
     // Keyboard
     enterEmailAddress: 'Enter your email address',
-    enterPostalCode: 'Enter your postal code (A1A1A1 format)',
+    enterPostalCode: 'Enter your postal code (A1A format)',
     startTyping: 'Start typing...',
-    
+
     // Payment Success
     paymentSuccessful: 'Payment Successful',
     paymentComplete: 'Payment Complete',
-    
+
     // Completion Screen
     completionMessage: 'Please take the receipt to\nGuest Services and enjoy\nyour visit to THEMUSEUM.',
     emailBackup: 'A backup receipt has been\nsent to your email.',
     startNewPurchase: 'Start New Purchase',
     autoReturn: 'Returning to main page in {seconds}...',
     returnNow: 'Return Now',
-    
+
     // Language
     language: 'Language',
     english: 'English',
@@ -122,16 +123,16 @@ const translations = {
     // Landing Screen
     buyTickets: 'ACHETER BILLETS',
     singleCardPayment: 'Paiement par carte unique seulement',
-    
+
     // Progress Steps
     selectTickets: 'Sélectionner Billets',
     yourDetails: 'Vos Détails',
     payment: 'Paiement',
     complete: 'Terminé',
-    
+
     // Museum Header
     checkout: 'Commande',
-    
+
     // Ticket Selection
     museumGeneralAdmission: 'THEMUSEUM Admission Générale',
     ticketDescription: 'Achetez des billets pour l\'admission générale au THEMUSEUM comme indiqué à l\'avance. Veuillez imprimer "lire plus" pour les détails. Lire plus',
@@ -165,19 +166,19 @@ const translations = {
     selectedTax: 'Taxe sélectionnée',
     serviceFee: 'Frais de service',
     totalIncTax: 'Total (taxes incl.)',
-    
+
     // Navigation
     backToMain: '← Écran Principal',
     backToCheckout: '← Commande',
     backToDetails: '← Détails',
-    
+
     // Details Screen
     yourDetailsTitle: 'Vos Détails',
     yourDetailsSubtitle: 'Veuillez entrer vos détails avant de commander.',
     emailAddress: 'Adresse courriel*',
     emailPlaceholder: 'Entrez votre adresse courriel',
-    postalCodeLabel: 'Code postal* (format A1A1A1)',
-    postalCodePlaceholder: 'A1A1A1',
+    postalCodeLabel: 'Code postal* (format A1A)',
+    postalCodePlaceholder: 'A1A',
     firstName: 'Prénom',
     lastName: 'Nom de famille',
     email: 'Adresse courriel',
@@ -185,7 +186,7 @@ const translations = {
     postalCode: 'Code postal',
     newsletter: 'M\'envoyer des bulletins et mises à jour',
     continueButton: 'Continuer',
-    
+
     // Checkout Screen
     cardPayment: 'Paiement par carte:',
     pinPadInstructions: 'Veuillez suivre les instructions\nsur le terminal de NIP',
@@ -195,23 +196,23 @@ const translations = {
     emailSent: '✓ Courriel Envoyé',
     cardReader: 'Lecteur de Carte',
     startOver: 'RECOMMENCER',
-    
+
     // Keyboard
     enterEmailAddress: 'Entrez votre adresse courriel',
-    enterPostalCode: 'Entrez votre code postal (format A1A1A1)',
+    enterPostalCode: 'Entrez votre code postal (format A1A)',
     startTyping: 'Commencez à taper...',
-    
+
     // Payment Success
     paymentSuccessful: 'Paiement Réussi',
     paymentComplete: 'Paiement Terminé',
-    
+
     // Completion Screen
     completionMessage: 'Veuillez apporter le reçu au\nService à la clientèle et profitez\nde votre visite au THEMUSEUM.',
     emailBackup: 'Un reçu de sauvegarde a été\nenvoyé à votre courriel.',
     startNewPurchase: 'Nouvel Achat',
     autoReturn: 'Retour à la page principale dans {seconds}...',
     returnNow: 'Retourner Maintenant',
-    
+
     // Language
     language: 'Langue',
     english: 'English',

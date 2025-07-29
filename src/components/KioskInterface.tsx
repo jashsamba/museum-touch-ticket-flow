@@ -138,22 +138,22 @@ const KioskInterface = () => {
       <div className="language-selector-wrapper">
         <LanguageSelector />
       </div>
-      
+
       {currentScreen !== 'landing' && currentScreen !== 'completion' && (
-        <ProgressIndicator 
+        <ProgressIndicator
           currentStep={getStepNumber()}
           totalSteps={4}
           steps={steps}
         />
       )}
-      
+
       <div className={`screen-transition ${isNavigatingBack ? 'screen-enter-back' : 'screen-enter'}`}>
         {currentScreen === 'landing' && (
           <LandingScreen onStartFlow={handleStartFlow} />
         )}
-        
+
         {currentScreen === 'tickets' && (
-          <TicketSelectionScreen 
+          <TicketSelectionScreen
             onContinue={handleTicketSelections}
             onBack={handleBackToLanding}
             quantities={cartQuantities}
@@ -161,9 +161,9 @@ const KioskInterface = () => {
             onUpdateQuantity={updateCartQuantity}
           />
         )}
-        
+
         {currentScreen === 'details' && (
-          <DetailsScreen 
+          <DetailsScreen
             onContinue={handleDetailsSubmit}
             onBack={handleBackToTickets}
             totals={flowData.selections?.totals}
@@ -171,9 +171,9 @@ const KioskInterface = () => {
             addOns={cartAddOns}
           />
         )}
-        
+
         {currentScreen === 'checkout' && (
-          <CheckoutScreen 
+          <CheckoutScreen
             onComplete={handlePaymentComplete}
             onBack={handleBackToDetails}
             totals={flowData.selections?.totals}
@@ -182,9 +182,9 @@ const KioskInterface = () => {
             userEmail={flowData.details?.email}
           />
         )}
-        
+
         {currentScreen === 'completion' && (
-          <CompletionScreen 
+          <CompletionScreen
             onStartOver={handleStartOver}
             orderDetails={{
               email: flowData.details?.email || '',
